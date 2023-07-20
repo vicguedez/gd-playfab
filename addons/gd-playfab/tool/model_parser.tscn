@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxwe2n8y4rab8"]
+
+[ext_resource type="Script" path="res://addons/gd-playfab/tool/model_parser.gd" id="1_vpv8n"]
+
+[node name="model_parser" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vpv8n")
+
+[node name="container" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="input_h_container" type="HBoxContainer" parent="container"]
+layout_mode = 2
+
+[node name="label" type="Label" parent="container/input_h_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Model input:"
+vertical_alignment = 1
+
+[node name="clear" type="Button" parent="container/input_h_container"]
+layout_mode = 2
+text = "Clear"
+
+[node name="input" type="TextEdit" parent="container"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="output_h_container" type="HBoxContainer" parent="container"]
+layout_mode = 2
+
+[node name="label" type="Label" parent="container/output_h_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Model output:"
+vertical_alignment = 1
+
+[node name="extend" type="CheckBox" parent="container/output_h_container"]
+layout_mode = 2
+text = "Extends PlayFabModel"
+
+[node name="copy" type="Button" parent="container/output_h_container"]
+layout_mode = 2
+text = "Copy"
+
+[node name="output" type="TextEdit" parent="container"]
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+draw_control_chars = true
+draw_tabs = true
+draw_spaces = true

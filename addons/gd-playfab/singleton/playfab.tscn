@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bm3vtcsj4shyl"]
+
+[ext_resource type="Script" path="res://addons/gd-playfab/singleton/playfab.gd" id="1_0cafj"]
+
+[node name="playfab" type="Node"]
+script = ExtResource("1_0cafj")
