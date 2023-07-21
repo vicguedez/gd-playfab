@@ -1,6 +1,7 @@
 extends RefCounted
 class_name PlayFabModel
 
+## Returns the whole model as a Dictionary, any model within it will be converted as well.
 func to_dictionary() -> Dictionary:
 	var dict = {}
 	var prop_list = get_property_list()
@@ -10,35 +11,55 @@ func to_dictionary() -> Dictionary:
 			continue
 		
 		var value = get(prop.name)
+		var new_value = value
 		
 		if value is PlayFabModel:
-			value = value.to_dictionary()
+			new_value = value.to_dictionary()
 		elif prop.type == TYPE_ARRAY:
-			var new_array = []
-			
-			for array_value in value:
-				if array_value is PlayFabModel:
-					new_array.append(array_value.to_dictionary())
-				else:
-					new_array.append(array_value)
-			
-			value = new_array
+			new_value = _array_convert_models_to_dictionary(value)
 		elif prop.type == TYPE_DICTIONARY:
-			var new_dict = {}
-			
-			for key in value:
-				var dict_value = value[key]
-				
-				if dict_value is PlayFabModel:
-					new_dict[key] = dict_value.to_dictionary()
-				else:
-					new_dict[key] = dict_value
-			
-			value = new_dict
+			new_value = _dictionary_convert_models_to_dictionary(value)
 		
-		dict[prop.name] = value
+		dict[prop.name] = new_value
 	
 	return dict
+
+func _array_convert_models_to_dictionary(array: Array) -> Array:
+	var new_array = []
+	
+	for value in array:
+		var value_type = typeof(value)
+		var new_value = value
+		
+		if value is PlayFabModel:
+			new_value = value.to_dictionary()
+		elif value_type == TYPE_ARRAY:
+			new_value = _array_convert_models_to_dictionary(value)
+		elif value_type == TYPE_DICTIONARY:
+			new_value = _dictionary_convert_models_to_dictionary(value)
+		
+		new_array.append(new_value)
+	
+	return new_array
+
+func _dictionary_convert_models_to_dictionary(dict: Dictionary) -> Dictionary:
+	var new_dict = {}
+	
+	for key in dict:
+		var value = dict[key]
+		var value_type = typeof(value)
+		var new_value = value
+		
+		if value is PlayFabModel:
+			new_value = value.to_dict()
+		elif value_type == TYPE_ARRAY:
+			new_value = _array_convert_models_to_dictionary(value)
+		elif value_type == TYPE_DICTIONARY:
+			new_value = _dictionary_convert_models_to_dictionary(value)
+		
+		new_dict[key] = new_value
+	
+	return new_dict
 
 ## Combined entity type and ID structure which uniquely identifies a single entity.
 class EntityKey extends PlayFabModel:
