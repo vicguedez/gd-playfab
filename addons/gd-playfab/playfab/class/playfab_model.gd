@@ -77,6 +77,7 @@ class EntityTokenResponse extends PlayFabModel:
 	var token_expiration: String
 
 class UserPrivateAccountInfo extends PlayFabModel:
+	## user email address
 	var email: String
 
 class UserTitleInfo extends PlayFabModel:
@@ -91,37 +92,11 @@ class UserTitleInfo extends PlayFabModel:
 	## timestamp for the last user login for this title.
 	var last_login: String
 	## source by which the user first joined the game, if known.
-	var origination: UserOrigination
+	var origination: String
 	## Title player account entity for this user.
 	var title_player_account: EntityKey
 	## boolean indicating whether or not the user is currently banned for a title.
 	var is_banned: bool
-
-class UserOrigination extends PlayFabModel:
-	var amazon: String
-	var android: String
-	var apple: String
-	var custom_id: String
-	var facebook: String
-	var facebook_instant_games_id: String
-	var game_center: String
-	var gamers_first: String
-	var google: String
-	var google_play_games: String
-	var ios: String
-	var kongregate: String
-	var load_test: String
-	var nintendo_switch_account: String
-	var nintendo_switch_device_id: String
-	var open_id_connect: String
-	var organic: String
-	var psn: String
-	var parse: String
-	var server_custom_id: String
-	var steam: String
-	var twitch: String
-	var unknown: String
-	var xbox_live: String
 
 class UserAndroidDeviceInfo extends PlayFabModel:
 	## Android device ID.
