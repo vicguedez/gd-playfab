@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxwe2n8y4rab8"]
+[gd_scene load_steps=3 format=3 uid="uid://cxwe2n8y4rab8"]
 
 [ext_resource type="Script" path="res://addons/gd-playfab/tool/model_parser.gd" id="1_vpv8n"]
+
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_ebw2r"]
 
 [node name="model_parser" type="Control"]
 layout_mode = 3
@@ -47,9 +49,16 @@ size_flags_vertical = 1
 text = "Model output:"
 vertical_alignment = 1
 
-[node name="extend" type="CheckBox" parent="container/output_h_container"]
+[node name="extend" type="OptionButton" parent="container/output_h_container"]
 layout_mode = 2
-text = "Extends PlayFabModel"
+item_count = 3
+selected = 0
+popup/item_0/text = "Standalone"
+popup/item_0/id = 0
+popup/item_1/text = "PlayFabModel"
+popup/item_1/id = 1
+popup/item_2/text = "PlayFabHttpRequest"
+popup/item_2/id = 2
 
 [node name="copy" type="Button" parent="container/output_h_container"]
 layout_mode = 2
@@ -59,6 +68,6 @@ text = "Copy"
 layout_mode = 2
 size_flags_vertical = 3
 editable = false
-draw_control_chars = true
+wrap_mode = 1
 draw_tabs = true
-draw_spaces = true
+syntax_highlighter = SubResource("SyntaxHighlighter_ebw2r")
