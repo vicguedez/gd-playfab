@@ -48,12 +48,13 @@ func send() -> bool:
 	
 	return true
 
-func _check_fields() -> bool:
+func _check_required_fields() -> bool:
 	for field in get_required_fields():
 		var value = get(field)
 		
 		if (
-				(typeof(value) == TYPE_STRING and value.is_empty())
+				typeof(value) == TYPE_NIL
+				|| (typeof(value) == TYPE_STRING and value.is_empty())
 				|| (typeof(value) == TYPE_DICTIONARY and value.is_empty())
 				|| (typeof(value) == TYPE_ARRAY and value.is_empty())
 			):
