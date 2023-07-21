@@ -64,3 +64,23 @@ func _check_required_fields() -> bool:
 			return false
 	
 	return true
+
+func _get_fields_as_dictionary() -> Dictionary:
+	var dict = {}
+	var fields = get_fields()
+	
+	for key in fields:
+		var value = fields[key]
+		var value_type = typeof(value)
+		var new_value = value
+		
+		if value is PlayFabModel:
+			new_value = value.to_dictionary()
+		elif value_type == TYPE_ARRAY:
+			new_value = PlayFabUtils.array_convert_models_to_dictionary(value)
+		elif value_type == TYPE_DICTIONARY:
+			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value)
+		
+		dict[key] = value
+	
+	return {}
