@@ -8,5 +8,24 @@ class LoginWithEmailAddress extends PlayFabHttpRequest:
 	var email: String
 	## Password for the PlayFab account (6-100 characters).
 	var password: String
+	## Unique identifier for the title, found in the Settings > Game Properties section of the PlayFab developer site when a title has been selected.
+	var title_id: String
+	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+	var custom_tags: Dictionary = {}
 	## Flags for which pieces of info to return for the user.
-	var info_request_parameters: PlayFabModel.GetPlayerCombinedInfoRequestParams
+	var info_request_parameters: PlayFabModel.GetPlayerCombinedInfoRequestParams = PlayFabModel.GetPlayerCombinedInfoRequestParams.new()
+	
+	func get_config() -> Dictionary:
+		return {
+			"path": "/Client/LoginWithEmailAddress",
+			"fields": {
+				"email": email,
+				"password": password,
+				"title_id": title_id,
+				"custom_tags": custom_tags,
+				"info_request_parameters": info_request_parameters,
+			},
+			"required_fields": ["email","password","title_id"],
+		}
+
+
