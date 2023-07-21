@@ -38,15 +38,17 @@ func get_fields() -> Dictionary:
 func get_required_fields() -> Array[String]:
 	return get_config().get("required_fields", [])
 
-func send() -> bool:
-	if not _check_fields():
-		return false
+func send() -> Error:
+	if not _check_required_fields():
+		return ERR_INVALID_DATA
 	
 	var url = "https://%s.%s%s" % [PlayFab.Settings.title_id, api_url, get_path()]
+	var request_result = http.request(url, PackedStringArray(), get_method())
 	
-	http.request(url, PackedStringArray(), get_method())
+	if not request_result == OK:
+		return request_result
 	
-	return true
+	return OK
 
 func _check_required_fields() -> bool:
 	for field in get_required_fields():
