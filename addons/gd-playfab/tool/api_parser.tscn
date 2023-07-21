@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxwe2n8y4rab8"]
 
-[ext_resource type="Script" path="res://addons/gd-playfab/tool/model_parser.gd" id="1_vpv8n"]
+[ext_resource type="Script" path="res://addons/gd-playfab/tool/api_parser.gd" id="1_vpv8n"]
 
 [sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_ebw2r"]
 
