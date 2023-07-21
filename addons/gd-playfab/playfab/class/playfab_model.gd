@@ -1,6 +1,45 @@
 extends RefCounted
 class_name PlayFabModel
 
+func to_dictionary() -> Dictionary:
+	var dict = {}
+	var prop_list = get_property_list()
+	
+	for prop in prop_list:
+		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		
+		var value = get(prop.name)
+		
+		if value is PlayFabModel:
+			value = value.to_dictionary()
+		elif prop.type == TYPE_ARRAY:
+			var new_array = []
+			
+			for array_value in value:
+				if array_value is PlayFabModel:
+					new_array.append(array_value.to_dictionary())
+				else:
+					new_array.append(array_value)
+			
+			value = new_array
+		elif prop.type == TYPE_DICTIONARY:
+			var new_dict = {}
+			
+			for key in value:
+				var dict_value = value[key]
+				
+				if dict_value is PlayFabModel:
+					new_dict[key] = dict_value.to_dictionary()
+				else:
+					new_dict[key] = dict_value
+			
+			value = new_dict
+		
+		dict[prop.name] = value
+	
+	return dict
+
 ## Combined entity type and ID structure which uniquely identifies a single entity.
 class EntityKey extends PlayFabModel:
 	## Unique ID of the entity.
