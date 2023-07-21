@@ -3,7 +3,7 @@ extends Node
 var Settings: PlayFabSettings
 var Client: PlayFabClient
 
-const _http_pool: Array[HTTPRequest] = []
+var _http_pool: Array[HTTPRequest] = []
 
 func _ready() -> void:
 	Settings = preload("res://addons/gd-playfab/playfab/playfab_settings.tscn").instantiate()
@@ -12,14 +12,14 @@ func _ready() -> void:
 	add_child(Settings)
 	add_child(Client)
 
-func http_request_setup(request: PlayFabHttpRequest) -> void:
-	request.http = _http_pool.pop_front()
+func get_http() -> HTTPRequest:
+	var http = _http_pool.pop_front()
 	
-	if request.http == null:
-		request.http = HTTPRequest.new()
-		add_child(request.http)
+	if http == null:
+		http = HTTPRequest.new()
+		add_child(http)
 	
-	request.http_released.connect(_on_request_http_released)
+	return http
 
-func _on_request_http_released(http: HTTPRequest) -> void:
+func recycle_http(http: HTTPRequest) -> void:
 	_http_pool.append(http)
