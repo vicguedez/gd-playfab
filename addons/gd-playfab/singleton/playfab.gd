@@ -3,6 +3,9 @@ extends Node
 var Settings: PlayFabSettings
 var Client: PlayFabClient
 
+var http_threads = true
+var http_compress = false
+
 var _http_pool: Array[HTTPRequest] = []
 
 func _ready() -> void:
