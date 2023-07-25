@@ -27,5 +27,9 @@ class LoginWithEmailAddress extends PlayFabHttpRequest:
 			},
 			"required_fields": ["email","password","title_id"],
 		}
-
-
+	
+	func get_response_result() -> PlayFabModel.LoginResult:
+		return super()
+	
+	func _new_result_model() -> PlayFabModel.LoginResult:
+		return PlayFabModel.LoginResult.new()

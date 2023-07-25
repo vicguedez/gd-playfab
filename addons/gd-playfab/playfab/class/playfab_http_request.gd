@@ -5,6 +5,15 @@ class_name PlayFabHttpRequest
 ## Same signal as HTTPRequest.request_completed
 signal completed(result: HTTPRequest.Result, response_code: int, headers: PackedStringArray, body: PackedByteArray)
 
+const SUCCESS_CODES = [
+	HTTPClient.RESPONSE_OK,
+	HTTPClient.RESPONSE_NO_CONTENT,
+	]
+const ERROR_CODES = [
+	HTTPClient.RESPONSE_BAD_REQUEST,
+	HTTPClient.RESPONSE_UNAUTHORIZED,
+	]
+
 ## API endpoint. Do not modify unless you know what you are doing.
 var api_url = "playfabapi.com"
 ## Do not use unless you know what you are doing.
@@ -67,9 +76,14 @@ func get_response_error() -> PlayFabModel.ApiErrorWrapper:
 	return _completed.get("error", null)
 
 ## Returns response's result if any. Default null.
-func get_response_result() -> PlayFabModel:
+func get_response_result():
 	return _completed.get("response", null)
 
+## Returns true if the response is expected. Default false.
+func has_expected_response() -> bool:
+	return _completed.get("expected", false)
+
+## Sends the request. Returns FAILED if a required field is not set, OK on success.
 func send() -> Error:
 	if not _check_required_fields():
 		return FAILED
@@ -142,6 +156,9 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 	
 	return dict
 
+func _new_result_model():
+	return PlayFabModel.new()
+
 func _on_request_completed(result: HTTPRequest.Result, code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	_requesting = false
 	_completed = {
@@ -150,6 +167,26 @@ func _on_request_completed(result: HTTPRequest.Result, code: int, headers: Packe
 		"headers": headers,
 		"body": body,
 	}
+	
+	var body_dict = JSON.parse_string(body.get_string_from_utf8())
+	var dict_is_body_response = true
+	
+	if SUCCESS_CODES.has(code):
+		_completed["expected"] = true
+		
+		var model = _new_result_model()
+		
+		if body_dict:
+			model.parse_dictionary(body_dict, dict_is_body_response)
+		
+		_completed["response"] = model
+	elif ERROR_CODES.has(code):
+		var error = PlayFabModel.ApiErrorWrapper.new()
+		
+		if body_dict:
+			error.parse_dictionary(body_dict, dict_is_body_response)
+		
+		_completed["error"] = error
 	
 	completed.emit(result, code, headers, body)
 	

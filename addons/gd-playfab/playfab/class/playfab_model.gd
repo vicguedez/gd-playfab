@@ -27,6 +27,39 @@ func to_dictionary(keys_pascal_case = false) -> Dictionary:
 	
 	return dict
 
+## Parses a dictionary values into the Model.
+func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
+	var prop_list = get_property_list()
+	
+	for prop in prop_list:
+		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		
+		var key: String = prop.name
+		
+		if self is ApiErrorWrapper:
+			key = key.to_camel_case()
+		elif dict_is_body_response:
+			key = key.to_pascal_case()
+		
+		var prop_value = get(prop.name)
+		
+		var value = dict.get(key)
+		var value_type = typeof(value)
+		var new_value
+		
+		if prop_value is PlayFabModel:
+			new_value = prop_value.new()
+			new_value.parse_dictionary(value, dict_is_body_response)
+		elif value_type == TYPE_ARRAY:
+			new_value = value
+		elif value_type == TYPE_DICTIONARY:
+			new_value = value
+		else:
+			new_value = value
+		
+		set(prop.name, new_value)
+
 ## Combined entity type and ID structure which uniquely identifies a single entity.
 class EntityKey extends PlayFabModel:
 	## Unique ID of the entity.
