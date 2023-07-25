@@ -124,7 +124,7 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 	for key in fields:
 		var value = fields[key]
 		var value_type = typeof(value)
-		var new_value = value
+		var new_value
 		
 		if value is PlayFabModel:
 			new_value = value.to_dictionary(keys_pascal_case)
@@ -132,6 +132,8 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 			new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
 		elif value_type == TYPE_DICTIONARY:
 			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+		else:
+			new_value = value
 		
 		if keys_pascal_case:
 			key = key.to_pascal_case()
