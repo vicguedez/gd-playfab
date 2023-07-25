@@ -65,7 +65,7 @@ func _check_required_fields() -> bool:
 	
 	return true
 
-func _get_fields_as_dictionary() -> Dictionary:
+func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 	var dict = {}
 	var fields = get_fields()
 	
@@ -75,12 +75,18 @@ func _get_fields_as_dictionary() -> Dictionary:
 		var new_value = value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary()
+			new_value = value.to_dictionary(keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
-			new_value = PlayFabUtils.array_convert_models_to_dictionary(value)
+			new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
 		elif value_type == TYPE_DICTIONARY:
-			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value)
+			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
 		
-		dict[key] = value
+		if keys_pascal_case:
+			key = key.to_pascal_case()
+		
+		dict[key] = new_value
+	
+	return dict
+
 	
 	return {}

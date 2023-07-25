@@ -2,7 +2,7 @@ extends RefCounted
 class_name PlayFabModel
 
 ## Returns the whole model as a Dictionary, any model within it will be converted as well.
-func to_dictionary() -> Dictionary:
+func to_dictionary(keys_pascal_case = false) -> Dictionary:
 	var dict = {}
 	var prop_list = get_property_list()
 	
@@ -14,13 +14,16 @@ func to_dictionary() -> Dictionary:
 		var new_value = value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary()
+			new_value = value.to_dictionary(keys_pascal_case)
 		elif prop.type == TYPE_ARRAY:
-			new_value = PlayFabUtils.array_convert_models_to_dictionary(value)
+			new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
 		elif prop.type == TYPE_DICTIONARY:
-			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value)
+			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
 		
-		dict[prop.name] = new_value
+		if keys_pascal_case:
+			dict[prop.name.to_pascal_case()] = new_value
+		else:
+			dict[prop.name] = new_value
 	
 	return dict
 
