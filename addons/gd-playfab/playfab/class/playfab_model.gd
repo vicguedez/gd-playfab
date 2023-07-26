@@ -74,6 +74,12 @@ class EntityTokenResponse extends PlayFabModel:
 	var entity_token: String
 	## The time the token will expire, if it is an expiring token, in UTC.
 	var token_expiration: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"entity":
+			return EntityKey.new()
+		
+		return null
 
 class UserPrivateAccountInfo extends PlayFabModel:
 	## user email address
@@ -96,6 +102,12 @@ class UserTitleInfo extends PlayFabModel:
 	var title_player_account: EntityKey
 	## boolean indicating whether or not the user is currently banned for a title.
 	var is_banned: bool
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"title_player_account":
+			return EntityKey.new()
+		
+		return null
 
 class UserAndroidDeviceInfo extends PlayFabModel:
 	## Android device ID.
@@ -193,6 +205,12 @@ class UserSteamInfo extends PlayFabModel:
 	var steam_id: String
 	## Steam display name.
 	var steam_name: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"steam_activation_status":
+			return TitleActivationStatus.new()
+		
+		return null
 
 class UserTwitchInfo extends PlayFabModel:
 	## Twitch ID.
@@ -251,6 +269,48 @@ class UserAccountInfo extends PlayFabModel:
 	var username: String
 	## User XBox account information, if a XBox account has been linked.
 	var xbox_info: UserXboxInfo
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"entity":
+			return EntityKey.new()
+		elif property == &"android_device_info":
+			return UserAndroidDeviceInfo.new()
+		elif property == &"apple_account_info":
+			return UserAppleIdInfo.new()
+		elif property == &"custom_id_info":
+			return UserCustomIdInfo.new()
+		elif property == &"facebook_info":
+			return UserFacebookInfo.new()
+		elif property == &"facebook_instant_games_id_info":
+			return UserFacebookInstantGamesIdInfo.new()
+		elif property == &"game_center_info":
+			return UserGameCenterInfo.new()
+		elif property == &"google_info":
+			return UserGoogleInfo.new()
+		elif property == &"google_play_games_info":
+			return UserGooglePlayGamesInfo.new()
+		elif property == &"ios_device_info":
+			return UserIosDeviceInfo.new()
+		elif property == &"kongregate_info":
+			return UserKongregateInfo.new()
+		elif property == &"nintendo_switch_account_info":
+			return UserNintendoSwitchAccountIdInfo.new()
+		elif property == &"nintendo_switch_device_id_info":
+			return UserNintendoSwitchDeviceIdInfo.new()
+		elif property == &"private_info":
+			return UserPrivateAccountInfo.new()
+		elif property == &"psn_info":
+			return UserPsnInfo.new()
+		elif property == &"steam_info":
+			return UserSteamInfo.new()
+		elif property == &"title_info":
+			return UserTitleInfo.new()
+		elif property == &"twitch_info":
+			return UserTwitchInfo.new()
+		elif property == &"xbox_info":
+			return UserXboxInfo.new()
+		
+		return null
 
 ## A unique instance of an item in a user's inventory. Note, to retrieve additional information for an item such as Tags, Description that are the same across all instances of the item, a call to GetCatalogItems is required. The ItemID of can be matched to a catalog entry, which contains the additional information. Also note that Custom Data is only set when the User's specific instance has updated the CustomData via a call to UpdateUserInventoryItemCustomData. Other fields such as UnitPrice and UnitCurrency are only set when the item was granted via a purchase.
 class ItemInstance extends PlayFabModel:
@@ -319,6 +379,12 @@ class ContactEmailInfoModel extends PlayFabModel:
 	var name: String
 	## The verification status of the email.
 	var verification_status: EmailVerificationStatus
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"verification_status":
+			return EmailVerificationStatus.new()
+		
+		return null
 
 class LinkedPlatformAccountModel extends PlayFabModel:
 	## Linked account email of the user on the platform, if available.
@@ -367,6 +433,12 @@ class SubscriptionModel extends PlayFabModel:
 	var subscription_item_id: String
 	## The provider for this subscription. Apple or Google Play are supported today.
 	var subscription_provider: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"status":
+			return SubscriptionProviderStatus.new()
+		
+		return null
 
 class MembershipModel extends PlayFabModel:
 	## Whether this membership is active. That is, whether the MembershipExpiration time has been reached.
@@ -391,6 +463,12 @@ class PushNotificationRegistrationModel extends PlayFabModel:
 	var notification_endpoint_arn: String
 	## Push notification platform.
 	var platform: PushNotificationPlatform
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"platform":
+			return PushNotificationPlatform.new()
+		
+		return null
 
 class StatisticModel extends PlayFabModel:
 	## Statistic name.
@@ -474,6 +552,12 @@ class UserDataRecord extends PlayFabModel:
 	var permission: UserDataPermission
 	## Data stored for the specified user data key.
 	var value: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"permission":
+			return UserDataPermission.new()
+		
+		return null
 
 class VirtualCurrencyRechargeTime extends PlayFabModel:
 	## Maximum value to which the regenerating currency will automatically increment. Note that it can exceed this value through use of the AddUserVirtualCurrency API call. However, it will not regenerate automatically until it has fallen below this value.
@@ -510,6 +594,18 @@ class GetPlayerCombinedInfoResultPayload extends PlayFabModel:
 	var user_virtual_currency: Dictionary
 	## Dictionary of remaining times and timestamps for virtual currencies.
 	var user_virtual_currency_recharge_times: VirtualCurrencyRechargeTime
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"account_info":
+			return UserAccountInfo.new()
+		elif property == &"player_profile":
+			return PlayerProfileModel.new()
+		elif property == &"user_data" or property == &"user_read_only_data":
+			return UserDataRecord.new()
+		elif property == &"user_virtual_currency_recharge_times":
+			return VirtualCurrencyRechargeTime.new()
+		
+		return null
 
 class UserSettings extends PlayFabModel:
 	## Boolean for whether this player is eligible for gathering device info.
@@ -613,6 +709,12 @@ class GetPlayerCombinedInfoRequestParams extends PlayFabModel:
 	var user_data_keys: Array[String]
 	## Specific keys to search for in the custom data. Leave null to get all keys. Has no effect if GetUserReadOnlyData is false.
 	var user_read_only_data_keys: Array[String]
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"profile_constraints":
+			return PlayerProfileViewConstraints.new()
+		
+		return null
 
 class LoginResult extends PlayFabModel:
 	## If LoginTitlePlayerAccountEntity flag is set on the login request the title_player_account will also be logged in and returned.
@@ -631,3 +733,15 @@ class LoginResult extends PlayFabModel:
 	var settings_for_user: UserSettings
 	## The experimentation treatments for this user at the time of login.
 	var treatment_assignment: TreatmentAssignment
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"entity_token":
+			return EntityTokenResponse.new()
+		elif property == &"info_result_payload":
+			return GetPlayerCombinedInfoResultPayload.new()
+		elif property == &"settings_for_user":
+			return UserSettings.new()
+		elif property == &"treatment_assignment":
+			return TreatmentAssignment.new()
+		
+		return null
