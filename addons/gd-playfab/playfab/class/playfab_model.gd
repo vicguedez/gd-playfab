@@ -35,26 +35,42 @@ func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
 		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
 			continue
 		
-		var key: String = prop.name
+		var prop_key: String = prop.name
+		var prop_value = get(prop_key)
 		
 		if self is ApiErrorWrapper:
-			key = key.to_camel_case()
+			prop_key = prop_key.to_camel_case()
 		elif dict_is_body_response:
-			key = key.to_pascal_case()
+			prop_key = prop_key.to_pascal_case()
 		
-		var prop_value = get(prop.name)
-		
-		var value = dict.get(key)
-		var value_type = typeof(value)
+		var value = dict.get(prop_key)
 		var new_value
 		
-		if prop_value is PlayFabModel:
-			new_value = prop_value.new()
-			new_value.parse_dictionary(value, dict_is_body_response)
-		elif value_type == TYPE_ARRAY:
-			new_value = value
-		elif value_type == TYPE_DICTIONARY:
-			new_value = value
+		if prop.class_name == &"RefCounted" and value != null:
+			new_value = property_get_revert(prop.name)
+			
+			if new_value:
+				new_value.parse_dictionary(value, dict_is_body_response)
+		elif prop.type == TYPE_ARRAY:
+			# If prop is not a typed array with models.
+			if (
+					prop_value.get_typed_builtin() != TYPE_OBJECT
+					or prop_value.get_typed_class_name() != &"RefCounted"
+				):
+				
+				new_value = value
+			# If dictionary value is an array.
+			elif typeof(value) == TYPE_ARRAY:
+				new_value = []
+				
+				var type = prop_value.get_typed_script()
+				
+				for data in value:
+					var model = type.new()
+					
+					model.parse_dictionary(data, dict_is_body_response)
+					
+					new_value.append(model)
 		else:
 			new_value = value
 		
