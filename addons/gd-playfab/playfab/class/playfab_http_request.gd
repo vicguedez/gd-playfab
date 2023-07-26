@@ -177,7 +177,7 @@ func _on_request_completed(result: HTTPRequest.Result, code: int, headers: Packe
 		var model = _new_result_model()
 		
 		if body_dict:
-			model.parse_dictionary(body_dict, dict_is_body_response)
+			model.parse_dictionary(body_dict.get("data", {}), dict_is_body_response)
 		
 		_completed["response"] = model
 	elif ERROR_CODES.has(code):
