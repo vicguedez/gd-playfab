@@ -65,6 +65,7 @@ func _on_input_text_changed() -> void:
 	var _extends = ""
 	var _fields = []
 	var _required_fields = []
+	var _reverts = []
 	
 	match output_extend.get_selected_id():
 		Extend.PLAYFABMODEL:
@@ -129,8 +130,11 @@ func _on_input_text_changed() -> void:
 			type = type.replace("number", "float")
 		elif type.begins_with("integer"):
 			type = type.replace("integer", "int")
+		# Assume type is a model.
 		else:
-			if _extend_httprequest:
+			if _extend_model and not type.ends_with("[]"):
+				_reverts.append([key, type])
+			elif _extend_httprequest:
 				type = "PlayFabModel.%s" % type
 			
 			type_initialize = true
@@ -158,7 +162,19 @@ func _on_input_text_changed() -> void:
 		
 		output.insert_text_at_caret("\tvar %s: %s%s\n" % [key, type, initialize])
 	
-	if (_extend_httprequest):
+	if _extend_model and not _reverts.is_empty():
+		var first = _reverts.pop_front()
+		
+		output.insert_text_at_caret("\t\n\tfunc _property_get_revert(property: StringName) -> Variant:\n")
+		output.insert_text_at_caret('\t\tif property == &"%s":\n' % first[0])
+		output.insert_text_at_caret('\t\t\treturn %s.new()\n' % first[1])
+		
+		for next in _reverts:
+			output.insert_text_at_caret('\t\telif property == &"%s":\n' % next[0])
+			output.insert_text_at_caret('\t\t\treturn %s.new()\n' % next[1])
+		
+		output.insert_text_at_caret("\t\t\n\t\treturn null\n")
+	elif _extend_httprequest:
 		output.insert_text_at_caret("\t\n\tfunc get_config() -> Dictionary:\n")
 		output.insert_text_at_caret("\t\treturn {\n")
 		output.insert_text_at_caret('\t\t\t"fields": {\n')
