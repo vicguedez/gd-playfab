@@ -75,13 +75,17 @@ func get_response_body() -> PackedByteArray:
 func get_response_error() -> PlayFabModel.ApiErrorWrapper:
 	return _completed.get("error", null)
 
-## Returns response's result if any. Default null.
-func get_response_result():
-	return _completed.get("response", null)
+## Returns response's data model if any. Default null.
+func get_response_data():
+	return _completed.get("data", null)
 
 ## Returns true if the response is expected. Default false.
-func has_expected_response() -> bool:
+func is_response_expected() -> bool:
 	return _completed.get("expected", false)
+
+## Returns true if the response was an error. Default false.
+func is_response_error() -> bool:
+	return _completed.has("error")
 
 ## Sends the request. Returns FAILED if a required field is not set, OK on success.
 func send() -> Error:
@@ -179,7 +183,7 @@ func _on_request_completed(result: HTTPRequest.Result, code: int, headers: Packe
 		if body_dict:
 			model.parse_dictionary(body_dict.get("data", {}), dict_is_body_response)
 		
-		_completed["response"] = model
+		_completed["data"] = model
 	elif ERROR_CODES.has(code):
 		var error = PlayFabModel.ApiErrorWrapper.new()
 		
