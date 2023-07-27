@@ -2,8 +2,10 @@
 extends RefCounted
 class_name PlayFabHttpRequest
 
-## Same signal as HTTPRequest.request_completed
+## Same signal as HTTPRequest.request_completed.
 signal completed(result: HTTPRequest.Result, response_code: int, headers: PackedStringArray, body: PackedByteArray)
+## Emitted after completed, passes itself as an argument.
+signal finished(request)
 
 const SUCCESS_CODES = [
 	HTTPClient.RESPONSE_OK,
@@ -193,5 +195,6 @@ func _on_request_completed(result: HTTPRequest.Result, code: int, headers: Packe
 		_completed["error"] = error
 	
 	completed.emit(result, code, headers, body)
+	finished.emit(self)
 	
 	unreference.call_deferred()
