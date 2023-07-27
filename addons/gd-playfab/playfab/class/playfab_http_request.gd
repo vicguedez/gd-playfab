@@ -57,6 +57,14 @@ func get_fields() -> Dictionary:
 func get_required_fields() -> Array:
 	return get_config().get("required_fields", [])
 
+## Returns known success codes for this request. Default SUCCESS_CODES.
+func get_success_codes() -> Array[int]:
+	return SUCCESS_CODES
+
+## Returns known error codes for this request. Default ERROR_CODES.
+func get_error_codes() -> Array[int]:
+	return ERROR_CODES
+
 ## Returns request's result. Default -1
 func get_request_result() -> HTTPRequest.Result:
 	return _completed.get("result", -1)
@@ -177,7 +185,7 @@ func _on_request_completed(result: HTTPRequest.Result, code: int, headers: Packe
 	var body_dict = JSON.parse_string(body.get_string_from_utf8())
 	var dict_is_body_response = true
 	
-	if SUCCESS_CODES.has(code):
+	if get_success_codes().has(code):
 		_completed["expected"] = true
 		
 		var model = _new_result_model()
@@ -186,7 +194,7 @@ func _on_request_completed(result: HTTPRequest.Result, code: int, headers: Packe
 			model.parse_dictionary(body_dict.get("data", {}), dict_is_body_response)
 		
 		_completed["data"] = model
-	elif ERROR_CODES.has(code):
+	elif get_error_codes().has(code):
 		var error = PlayFabModel.ApiErrorWrapper.new()
 		
 		if body_dict:
