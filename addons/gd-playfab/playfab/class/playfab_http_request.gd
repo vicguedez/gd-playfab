@@ -29,7 +29,7 @@ func _init() -> void:
 	http.use_threads = PlayFab.http_threads
 	http.accept_gzip = PlayFab.http_compress
 	
-	set("title_id", PlayFab.Settings.title_id)
+	set("title_id", PlayFabSettings.title_id)
 
 func _notification(what: int) -> void:
 	if what != NOTIFICATION_PREDELETE:

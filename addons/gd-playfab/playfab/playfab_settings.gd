@@ -1,9 +1,9 @@
 extends Node
 class_name PlayFabSettings
 
-var title_id: String
+static var title_id: String
 
-const authentication_context = {
+static var authentication_context = {
 	"playfab_id": "",
 	"entity_id": "",
 	"entity_type": "",

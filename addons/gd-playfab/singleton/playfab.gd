@@ -1,19 +1,12 @@
 extends Node
 
-var Settings: PlayFabSettings
-var Client: PlayFabClient
-
 var http_threads = true
 var http_compress = false
 
 var _http_pool: Array[HTTPRequest] = []
 
 func _ready() -> void:
-	Settings = preload("res://addons/gd-playfab/playfab/playfab_settings.tscn").instantiate()
-	Client = preload("res://addons/gd-playfab/playfab/playfab_client.tscn").instantiate()
-	
-	add_child(Settings)
-	add_child(Client)
+	pass
 
 func get_http() -> HTTPRequest:
 	var http = _http_pool.pop_front()
