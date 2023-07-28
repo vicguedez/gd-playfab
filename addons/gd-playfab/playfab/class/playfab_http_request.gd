@@ -56,11 +56,11 @@ func get_required_fields() -> Array:
 	return get_config().get("required_fields", [])
 
 ## Returns known success codes for this request. Default SUCCESS_CODES.
-func get_success_codes() -> Array[int]:
+func get_success_codes() -> Array:
 	return SUCCESS_CODES
 
 ## Returns known error codes for this request. Default ERROR_CODES.
-func get_error_codes() -> Array[int]:
+func get_error_codes() -> Array:
 	return ERROR_CODES
 
 ## Returns request's result. Default -1
@@ -107,7 +107,7 @@ func send() -> Error:
 	if method == HTTPClient.METHOD_POST:
 		data = JSON.stringify(_get_fields_as_dictionary(keys_pascal_case))
 	
-	var url = "https://%s.%s%s" % [PlayFab.Settings.title_id, api_url, get_path()]
+	var url = "https://%s.%s%s" % [PlayFabSettings.title_id, api_url, get_path()]
 	var headers = [
 		"Content-Type: application/json",
 		"Content-Length: %s" % data.length()
