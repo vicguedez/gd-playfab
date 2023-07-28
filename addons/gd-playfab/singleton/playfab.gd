@@ -13,6 +13,9 @@ func get_http() -> HTTPRequest:
 	
 	if http == null:
 		http = HTTPRequest.new()
+		http.use_threads = http_threads
+		http.accept_gzip = http_compress
+		
 		add_child(http)
 	
 	return http

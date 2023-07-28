@@ -26,8 +26,6 @@ var _completed = {}
 
 func _init() -> void:
 	http = PlayFab.get_http()
-	http.use_threads = PlayFab.http_threads
-	http.accept_gzip = PlayFab.http_compress
 	
 	set("title_id", PlayFabSettings.title_id)
 
