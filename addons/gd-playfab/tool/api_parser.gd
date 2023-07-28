@@ -8,8 +8,9 @@ const LINES_TO_IGNORE = [
 
 enum Extend {
 	STANDALONE,
-	PLAYFABMODEL,
-	PLAYFABHTTPREQUEST
+	PLAYFAB_HTTP_REQUEST,
+	PLAYFAB_MODEL,
+	PLAYFAB_ECONOMY_MODEL
 }
 
 @onready
@@ -68,10 +69,13 @@ func _on_input_text_changed() -> void:
 	var _reverts = []
 	
 	match output_extend.get_selected_id():
-		Extend.PLAYFABMODEL:
+		Extend.PLAYFAB_ECONOMY_MODEL:
+			_extend_model = true
+			_extends = " extends PlayFabEconomyModel"
+		Extend.PLAYFAB_MODEL:
 			_extend_model = true
 			_extends = " extends PlayFabModel"
-		Extend.PLAYFABHTTPREQUEST:
+		Extend.PLAYFAB_HTTP_REQUEST:
 			_extend_httprequest = true
 			_extends = " extends PlayFabHttpRequest"
 		_:
@@ -135,7 +139,7 @@ func _on_input_text_changed() -> void:
 			if _extend_model and not type.ends_with("[]"):
 				_reverts.append([key, type])
 			elif _extend_httprequest:
-				type = "PlayFabModel.%s" % type
+				type = "PLAYFAB_MODEL.%s" % type
 			
 			type_initialize = true
 		

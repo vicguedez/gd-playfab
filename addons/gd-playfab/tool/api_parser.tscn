@@ -51,14 +51,16 @@ vertical_alignment = 1
 
 [node name="extend" type="OptionButton" parent="container/output_h_container"]
 layout_mode = 2
-item_count = 3
+item_count = 4
 selected = 0
 popup/item_0/text = "Standalone"
 popup/item_0/id = 0
-popup/item_1/text = "PlayFabModel"
+popup/item_1/text = "PlayFabHttpRequest"
 popup/item_1/id = 1
-popup/item_2/text = "PlayFabHttpRequest"
+popup/item_2/text = "PlayFabModel"
 popup/item_2/id = 2
+popup/item_3/text = "PlayFabEconomyModel"
+popup/item_3/id = 3
 
 [node name="copy" type="Button" parent="container/output_h_container"]
 layout_mode = 2
