@@ -9,6 +9,8 @@ const LINES_TO_IGNORE = [
 enum Extend {
 	STANDALONE,
 	PLAYFAB_HTTP_REQUEST,
+	PLAYFAB_CLIENT,
+	PLAYFAB_ECONOMY,
 	PLAYFAB_MODEL,
 	PLAYFAB_ECONOMY_MODEL
 }
@@ -32,6 +34,9 @@ func _ready() -> void:
 	
 	output_extend.item_selected.connect(_on_output_extend_item_selected)
 	output_copy.pressed.connect(_on_output_copy_pressed)
+	
+	for key in Extend.keys():
+		output_extend.add_item(key.to_pascal_case(), Extend[key])
 
 func _on_input_clear_pressed() -> void:
 	input.clear()
