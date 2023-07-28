@@ -66,25 +66,17 @@ func _on_input_text_changed() -> void:
 	var lines: PackedStringArray = input_text.split("\n", false)
 	var first_line = true;
 	
+	var _selected_extend = output_extend.get_selected_id()
 	var _extend_model = false
 	var _extend_httprequest = false
-	var _extends = ""
+	var _extends = (
+		""
+		if _selected_extend == Extend.STANDALONE
+		else " extends %s" % (Extend.keys()[_selected_extend].to_pascal_case())
+	)
 	var _fields = []
 	var _required_fields = []
 	var _reverts = []
-	
-	match output_extend.get_selected_id():
-		Extend.PLAYFAB_ECONOMY_MODEL:
-			_extend_model = true
-			_extends = " extends PlayFabEconomyModel"
-		Extend.PLAYFAB_MODEL:
-			_extend_model = true
-			_extends = " extends PlayFabModel"
-		Extend.PLAYFAB_HTTP_REQUEST:
-			_extend_httprequest = true
-			_extends = " extends PlayFabHttpRequest"
-		_:
-			pass
 	
 	while lines.size():
 		if first_line:
