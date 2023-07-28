@@ -11,8 +11,9 @@ enum Extend {
 	PLAY_FAB_HTTP_REQUEST,
 	PLAY_FAB_CLIENT,
 	PLAY_FAB_ECONOMY,
-	PLAY_FAB_MODEL,
-	PLAY_FAB_ECONOMY_MODEL
+	PLAY_FAB_MODEL=100,
+	PLAY_FAB_CLIENT_MODEL,
+	PLAY_FAB_ECONOMY_MODEL,
 }
 
 @onready
@@ -67,16 +68,22 @@ func _on_input_text_changed() -> void:
 	var first_line = true;
 	
 	var _selected_extend = output_extend.get_selected_id()
+	var _extend_string = Extend.find_key(_selected_extend).to_pascal_case()
 	var _extend_model = false
 	var _extend_httprequest = false
 	var _extends = (
 		""
 		if _selected_extend == Extend.STANDALONE
-		else " extends %s" % (Extend.keys()[_selected_extend].to_pascal_case())
+		else " extends %s" % _extend_string
 	)
 	var _fields = []
 	var _required_fields = []
 	var _reverts = []
+	
+	if _selected_extend >= Extend.PLAY_FAB_MODEL:
+		_extend_model = true
+	elif _selected_extend >= Extend.PLAY_FAB_HTTP_REQUEST:
+		_extend_httprequest = true
 	
 	while lines.size():
 		if first_line:
@@ -136,7 +143,7 @@ func _on_input_text_changed() -> void:
 			if _extend_model and not type.ends_with("[]"):
 				_reverts.append([key, type])
 			elif _extend_httprequest:
-				type = "PLAYFAB_MODEL.%s" % type
+				type = "%sModel.%s" % [_extend_string, type]
 			
 			type_initialize = true
 		
