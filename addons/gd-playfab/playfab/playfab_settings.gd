@@ -11,3 +11,10 @@ static var authentication_context = {
 	"entity_token": "",
 	"session_token": ""
 }
+
+static func set_login_result(result: PlayFabModel.LoginResult) -> void:
+	authentication_context.playfab_id = result.play_fab_id
+	authentication_context.entity_id = result.entity_token.entity.id
+	authentication_context.entity_type = result.entity_token.entity.type
+	authentication_context.entity_token = result.entity_token.entity_token
+	authentication_context.session_token = result.session_ticket
