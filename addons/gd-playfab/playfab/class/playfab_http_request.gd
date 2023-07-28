@@ -141,6 +141,8 @@ func _check_required_fields() -> bool:
 		
 		if (
 				typeof(value) == TYPE_NIL
+				|| (typeof(value) == TYPE_FLOAT and is_equal_approx(value, 0))
+				|| (typeof(value) == TYPE_INT and value == 0)
 				|| (typeof(value) == TYPE_STRING and value.is_empty())
 				|| (typeof(value) == TYPE_DICTIONARY and value.is_empty())
 				|| (typeof(value) == TYPE_ARRAY and value.is_empty())
