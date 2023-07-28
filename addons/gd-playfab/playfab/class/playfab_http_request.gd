@@ -55,6 +55,10 @@ func get_fields() -> Dictionary:
 func get_required_fields() -> Array:
 	return get_config().get("required_fields", [])
 
+## Returns required headers for this request. Default [].
+func get_required_headers() -> Array:
+	return get_config().get("required_headers", [])
+
 ## Returns known success codes for this request. Default SUCCESS_CODES.
 func get_success_codes() -> Array:
 	return SUCCESS_CODES
@@ -112,6 +116,12 @@ func send() -> Error:
 		"Content-Type: application/json",
 		"Content-Length: %s" % data.length()
 	]
+	
+	for header in get_required_headers():
+		if header == "X-EntityToken":
+			headers.append("X-EntityToken: %s" % PlayFabSettings.authentication_context.entity_token)
+		elif header == "X-SecretKey":
+			headers.append("X-SecretKey: %s" % PlayFabSettings.authentication_context.secret_key)
 	
 	var attempt = http.request(url, PackedStringArray(headers), method, data)
 	
