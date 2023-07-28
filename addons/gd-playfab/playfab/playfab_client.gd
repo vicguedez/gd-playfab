@@ -13,7 +13,7 @@ class LoginWithEmailAddress extends PlayFabClient:
 	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
 	var custom_tags: Dictionary = {}
 	## Flags for which pieces of info to return for the user.
-	var info_request_parameters: PlayFabModel.GetPlayerCombinedInfoRequestParams = PlayFabModel.GetPlayerCombinedInfoRequestParams.new()
+	var info_request_parameters: PlayFabClientModel.GetPlayerCombinedInfoRequestParams = PlayFabClientModel.GetPlayerCombinedInfoRequestParams.new()
 	
 	func get_config() -> Dictionary:
 		return {
@@ -28,8 +28,8 @@ class LoginWithEmailAddress extends PlayFabClient:
 			"required_fields": ["email","password","title_id"],
 		}
 	
-	func get_response_data() -> PlayFabModel.LoginResult:
+	func get_response_data() -> PlayFabClientModel.LoginResult:
 		return super()
 	
-	func _new_result_model() -> PlayFabModel.LoginResult:
-		return PlayFabModel.LoginResult.new()
+	func _new_result_model() -> PlayFabClientModel.LoginResult:
+		return PlayFabClientModel.LoginResult.new()

@@ -1,0 +1,2 @@
+extends PlayFabModel
+class_name PlayFabClientModel
