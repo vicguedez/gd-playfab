@@ -76,6 +76,29 @@ func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
 		
 		set(prop.name, new_value)
 
+## Returns true if any property has been altered from its default value.
+func is_dirty() -> bool:
+	for prop in get_property_list():
+		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		
+		var value = get(prop.name)
+		
+		if value is PlayFabModel and value.is_dirty():
+			return true
+		elif prop.type == TYPE_ARRAY and not value.is_empty():
+			return true
+		elif prop.type == TYPE_DICTIONARY and not value.is_empty():
+			return true
+		elif prop.type == TYPE_STRING and not value.is_empty():
+			return true
+		elif prop.type == TYPE_INT and not value == 0:
+			return true
+		elif prop.type == TYPE_FLOAT and not is_equal_approx(value, 0.0):
+			return true
+	
+	return false
+
 ## Combined entity type and ID structure which uniquely identifies a single entity.
 class EntityKey extends PlayFabModel:
 	## Unique ID of the entity.
