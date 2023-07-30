@@ -158,6 +158,7 @@ func _check_required_fields() -> bool:
 func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 	var dict = {}
 	var fields = get_fields()
+	var required = get_required_fields()
 	
 	for key in fields:
 		var value = fields[key]
@@ -165,7 +166,8 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary(keys_pascal_case)
+			if key in required or value.is_dirty():
+				new_value = value.to_dictionary(keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
 			new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
 		elif value_type == TYPE_DICTIONARY:
