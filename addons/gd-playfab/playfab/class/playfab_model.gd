@@ -61,7 +61,13 @@ func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
 				new_value = value
 			# If dictionary value is an array.
 			elif typeof(value) == TYPE_ARRAY:
-				new_value = []
+				# Create a new array properly typed so that "set(prop.name, new_value)" won't fail.
+				new_value = Array(
+						[],
+						prop_value.get_typed_builtin(),
+						prop_value.get_typed_class_name(),
+						prop_value.get_typed_script()
+					)
 				
 				var type = prop_value.get_typed_script()
 				
