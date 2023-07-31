@@ -22,18 +22,18 @@ You can delete the SDKs that you don't need once the addon has been copied. Let'
 
 ```gdscript
 func _ready() -> void:
-    # Replace with your own title id.
+	# Replace with your own title id.
 	PlayFabSettings.title_id = "XXXXX" 
 	
-    # To get full intellisense on newly created request, use the
-    # syntax var request := PlayFabX.MethodX.new() as PlayFabX.MethodX
-    # this is a quirk 
+	# To get full intellisense on newly created request, use the
+	# syntax var request := PlayFabX.MethodX.new() as PlayFabX.MethodX
+	# this is a quirk 
 	var login := PlayFabClient.LoginWithEmailAddress.new() as PlayFabClient.LoginWithEmailAddress
 	
 	login.email = "jhon@doe.com"
 	login.password = "password"
 	
-    if login.send() != OK:
+	if login.send() != OK:
 		print("Login no send")
 		return
 	
@@ -43,11 +43,11 @@ func _ready() -> void:
 		print("Login has error")
 		return
 	
-    # Login result model is automatically created and parsed from the response.
+	# Login result model is automatically created and parsed from the response.
 	var login_result := login.get_response_data()
 	
-    # Store current credentials to be used by following requests.
-    PlayFabSettings.store_credentials_from_login_result(login_result)
+	# Store current credentials to be used by following requests.
+	PlayFabSettings.store_credentials_from_login_result(login_result)
 	
 	var get_inventory := PlayFabEconomy.GetIventoryItems.new() as PlayFabEconomy.GetIventoryItems
 	
