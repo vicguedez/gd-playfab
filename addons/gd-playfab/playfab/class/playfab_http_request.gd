@@ -7,6 +7,7 @@ signal completed(result: HTTPRequest.Result, response_code: int, headers: Packed
 ## Emitted after completed, passes itself as an argument.
 signal finished(request)
 
+const SDK_VERSION = "1.0"
 const SUCCESS_CODES = [
 	HTTPClient.RESPONSE_OK,
 	HTTPClient.RESPONSE_NO_CONTENT,
@@ -18,6 +19,8 @@ const ERROR_CODES = [
 
 ## API endpoint. Do not modify unless you know what you are doing.
 var api_url = "playfabapi.com"
+## API version.
+var api_version = "230721"
 ## Do not use unless you know what you are doing.
 var http: HTTPRequest
 
@@ -112,6 +115,7 @@ func send() -> Error:
 	if not _check_required_fields():
 		return FAILED
 	
+	var sdk_header = "GDPlayFab-%s.%s" % [SDK_VERSION, api_version]
 	var keys_pascal_case = true
 	var method = get_method()
 	var data = ""
@@ -119,10 +123,11 @@ func send() -> Error:
 	if method == HTTPClient.METHOD_POST:
 		data = JSON.stringify(_get_fields_as_dictionary(keys_pascal_case))
 	
-	var url = "https://%s.%s%s" % [PlayFabSettings.title_id, api_url, get_path()]
+	var url = "https://%s.%s%s?sdk=%s" % [PlayFabSettings.title_id, api_url, get_path(), sdk_header]
 	var headers = [
 		"Content-Type: application/json",
-		"Content-Length: %s" % data.length()
+		"Content-Length: %s" % data.length(),
+		"X-PlayFabSDK: " + sdk_header
 	]
 	
 	for header in get_required_headers():
