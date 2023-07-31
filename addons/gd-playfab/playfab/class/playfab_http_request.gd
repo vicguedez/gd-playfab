@@ -39,63 +39,63 @@ func _notification(what: int) -> void:
 func get_config() -> Dictionary:
 	return {}
 
-## Returns target path for this request. Default "/".
+## Returns target path for this request. Default [code]"/"[/code].
 func get_path() -> String:
 	return get_config().get("path", "/")
 
-## Returns http method for this request. Default POST.
+## Returns http method for this request. Default [enum HTTPClient.METHOD_POST].
 func get_method() -> HTTPClient.Method:
 	return get_config().get("method", HTTPClient.METHOD_POST)
 
-## Returns data fields for this request. Default {}
+## Returns data fields for this request. Default [code]{}[/code]
 func get_fields() -> Dictionary:
 	return get_config().get("fields", {})
 
-## Returns required fields for this request. Default [].
+## Returns required fields for this request. Default [code][][/code].
 func get_required_fields() -> Array:
 	return get_config().get("required_fields", [])
 
-## Returns required headers for this request. Default [].
+## Returns required headers for this request. Default [code][][/code].
 func get_required_headers() -> Array:
 	return get_config().get("required_headers", [])
 
-## Returns known success codes for this request. Default SUCCESS_CODES.
+## Returns known success codes for this request. Default [constant SUCCESS_CODES].
 func get_success_codes() -> Array:
 	return SUCCESS_CODES
 
-## Returns known error codes for this request. Default ERROR_CODES.
+## Returns known error codes for this request. Default [constant ERROR_CODES].
 func get_error_codes() -> Array:
 	return ERROR_CODES
 
-## Returns request's result. Default -1
+## Returns request's result. Default [code]-1[/code].
 func get_request_result() -> HTTPRequest.Result:
 	return _completed.get("result", -1)
 
-## Returns response's http code. Default -1
+## Returns response's http code. Default [code]-1[/code].
 func get_response_code() -> int:
 	return _completed.get("code", -1)
 
-## Returns response's http headers. Default [].
+## Returns response's http headers. Default [code][][/code].
 func get_response_headers() -> PackedStringArray:
 	return _completed.get("headers", PackedStringArray([]))
 
-## Returns response's raw body. Default [].
+## Returns response's raw body. Default [code][][/code].
 func get_response_body() -> PackedByteArray:
 	return _completed.get("body", PackedByteArray([]))
 
-## Returns response's error if any. Default null.
+## Returns response's error if any. Default [code]null[/code].
 func get_response_error() -> PlayFabModel.ApiErrorWrapper:
 	return _completed.get("error", null)
 
-## Returns response's data model if any. Default null.
+## Returns response's data model if any. Default [code]null[/code].
 func get_response_data():
 	return _completed.get("data", null)
 
-## Returns true if the response is expected. Default false.
+## Returns true if the response is expected. Default [code]false[/code].
 func is_response_expected() -> bool:
 	return _completed.get("expected", false)
 
-## Returns true if the response was an error. Default false.
+## Returns true if the response was an error. Default [code]false[/code].
 func is_response_error() -> bool:
 	return _completed.has("error")
 
