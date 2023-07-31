@@ -99,7 +99,15 @@ func is_response_expected() -> bool:
 func is_response_error() -> bool:
 	return _completed.has("error")
 
-## Sends the request. Returns FAILED if a required field is not set, OK on success.
+## Utility method to check for errors after the request has finished. Checks that [method get_request_result] returns [enum HTTPRequest.RESULT_SUCCESS], [method is_response_error] returns [code]false[/code] and [method is_response_expected] returns [code]true[/code].
+func has_error() -> bool:
+	return (
+		get_request_result() != HTTPRequest.RESULT_SUCCESS
+		or is_response_error() == true
+		or is_response_expected() == false
+	)
+
+## Sends the request. Returns a value from [enum @GlobalScope.Error], [code]FAILED[/code] if a required field is not set, [code]OK[/code] on success.
 func send() -> Error:
 	if not _check_required_fields():
 		return FAILED
