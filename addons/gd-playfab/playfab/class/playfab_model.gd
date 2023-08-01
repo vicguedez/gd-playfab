@@ -761,32 +761,38 @@ class GetPlayerCombinedInfoRequestParams extends PlayFabModel:
 		
 		return null
 
-class LoginResult extends PlayFabModel:
+class AuthenticationResult extends PlayFabModel:
 	## If LoginTitlePlayerAccountEntity flag is set on the login request the title_player_account will also be logged in and returned.
 	var entity_token: EntityTokenResponse
-	## Results for requested info.
-	var info_result_payload: GetPlayerCombinedInfoResultPayload
-	## The time of this user's previous login. If there was no previous login, then it's DateTime.MinValue.
-	var last_login_time: String
-	## True if the account was newly created on this login.
-	var newly_created: bool
 	## Player's unique PlayFabId.
 	var play_fab_id: String
 	## Unique token authorizing the user and game at the server level, for the current session.
 	var session_ticket: String
 	## Settings specific to this user.
 	var settings_for_user: UserSettings
-	## The experimentation treatments for this user at the time of login.
-	var treatment_assignment: TreatmentAssignment
 	
 	func _property_get_revert(property: StringName) -> Variant:
 		if property == &"entity_token":
 			return EntityTokenResponse.new()
-		elif property == &"info_result_payload":
-			return GetPlayerCombinedInfoResultPayload.new()
 		elif property == &"settings_for_user":
 			return UserSettings.new()
+		
+		return null
+
+class LoginResult extends AuthenticationResult:
+	## Results for requested info.
+	var info_result_payload: GetPlayerCombinedInfoResultPayload
+	## The time of this user's previous login. If there was no previous login, then it's DateTime.MinValue.
+	var last_login_time: String
+	## True if the account was newly created on this login.
+	var newly_created: bool
+	## The experimentation treatments for this user at the time of login.
+	var treatment_assignment: TreatmentAssignment
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"info_result_payload":
+			return GetPlayerCombinedInfoResultPayload.new()
 		elif property == &"treatment_assignment":
 			return TreatmentAssignment.new()
 		
-		return null
+		return super(property)
