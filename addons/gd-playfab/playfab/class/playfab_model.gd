@@ -796,3 +796,8 @@ class LoginResult extends AuthenticationResult:
 			return TreatmentAssignment.new()
 		
 		return super(property)
+
+## Each account must have a unique email address in the PlayFab service. Once created, the account may be associated with additional accounts (Steam, Facebook, Game Center, etc.), allowing for added social network lists and achievements systems.
+class RegisterPlayFabUserResult extends AuthenticationResult:
+	## PlayFab unique user name.
+	var username: String
