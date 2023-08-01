@@ -18,3 +18,10 @@ static func set_authentication(result: PlayFabModel.AuthenticationResult) -> voi
 	authentication_context.entity_type = result.entity_token.entity.type
 	authentication_context.entity_token = result.entity_token.entity_token
 	authentication_context.session_token = result.session_ticket
+
+static func clear_authentication() -> void:
+	authentication_context.playfab_id = ""
+	authentication_context.entity_id = ""
+	authentication_context.entity_type = ""
+	authentication_context.entity_token = ""
+	authentication_context.session_token = ""
