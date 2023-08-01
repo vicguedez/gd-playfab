@@ -26,8 +26,8 @@ func _ready() -> void:
 	PlayFabSettings.title_id = "XXXXX" 
 	
 	# To get full intellisense on newly created request, use the
-	# syntax var request := PlayFabX.MethodX.new() as PlayFabX.MethodX
-	# this is a quirk 
+	# syntax "var request := PlayFabX.MethodX.new() as PlayFabX.MethodX"
+	# this is a Godot script editor quirk, is not specific to this addon.
 	var login := PlayFabClient.LoginWithEmailAddress.new() as PlayFabClient.LoginWithEmailAddress
 	
 	login.email = "jhon@doe.com"
@@ -47,7 +47,7 @@ func _ready() -> void:
 	var login_result := login.get_response_data()
 	
 	# Store current credentials to be used by following requests.
-	PlayFabSettings.store_credentials_from_login_result(login_result)
+	PlayFabSettings.set_authentication(login_result)
 	
 	var get_inventory := PlayFabEconomy.GetIventoryItems.new() as PlayFabEconomy.GetIventoryItems
 	
