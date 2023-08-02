@@ -15,18 +15,22 @@ class LoginWithEmailAddress extends PlayFabClient:
 	## Flags for which pieces of info to return for the user.
 	var info_request_parameters: PlayFabClientModel.GetPlayerCombinedInfoRequestParams = PlayFabClientModel.GetPlayerCombinedInfoRequestParams.new()
 	
-	func get_config() -> Dictionary:
-		return {
-			"path": "/Client/LoginWithEmailAddress",
-			"fields": {
-				"email": email,
-				"password": password,
-				"title_id": title_id,
-				"custom_tags": custom_tags,
-				"info_request_parameters": info_request_parameters,
-			},
-			"required_fields": ["email","password","title_id"],
-		}
+	func _init() -> void:
+		super()
+		
+		req_path = "/Client/LoginWithEmailAddress"
+		req_fields = [
+			"email",
+			"password",
+			"title_id",
+			"custom_tags",
+			"info_request_parameters",
+			]
+		req_required_fields = [
+			"email",
+			"password",
+			"title_id",
+			]
 	
 	func get_response_data() -> PlayFabClientModel.LoginResult:
 		return super()
@@ -56,23 +60,25 @@ class RegisterPlayFabUser extends PlayFabClient:
 	## PlayFab username for the account (3-20 characters).
 	var username: String
 	
-	func get_config() -> Dictionary:
-		return {
-			"path": "/Client/RegisterPlayFabUser",
-			"fields": {
-				"title_id": title_id,
-				"custom_tags": custom_tags,
-				"display_name": display_name,
-				"email": email,
-				"encrypted_request": encrypted_request,
-				"info_request_parameters": info_request_parameters,
-				"password": password,
-				"player_secret": player_secret,
-				"require_both_username_and_email": require_both_username_and_email,
-				"username": username,
-			},
-			"required_fields": ["title_id"],
-		}
+	func _init() -> void:
+		super()
+		
+		req_path = "/Client/RegisterPlayFabUser"
+		req_fields = [
+			"title_id",
+			"custom_tags",
+			"display_name",
+			"email",
+			"encrypted_request",
+			"info_request_parameters",
+			"password",
+			"player_secret",
+			"require_both_username_and_email",
+			"username",
+			]
+		req_required_fields = [
+			"title_id",
+			]
 	
 	func get_response_data() -> PlayFabClientModel.RegisterPlayFabUserResult:
 		return super()

@@ -8,15 +8,14 @@ class ValidateEntityToken extends PlayFabAuthentication:
 	## Client EntityToken.
 	var entity_token: String
 	
-	func get_config() -> Dictionary:
-		return {
-			"path": "/Authentication/ValidateEntityToken",
-			"fields": {
-				"custom_tags": custom_tags,
-				"entity_token": entity_token,
-			},
-			"required_headers": ["X-EntityToken"],
-		}
+	func _init() -> void:
+		super()
+		
+		req_path = "/Authentication/ValidateEntityToken"
+		req_fields = [
+			"custom_tags",
+			"entity_token",
+			]
 	
 	func get_response_data() -> PlayFabAuthenticationModel.ValidateEntityTokenResponse:
 		return super()

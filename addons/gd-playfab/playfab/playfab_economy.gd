@@ -21,18 +21,17 @@ class GetItems extends PlayFabEconomy:
 	## List of Item Ids.
 	var ids: Array[String]
 	
-	func get_config() -> Dictionary:
-		return {
-			"path": "/Catalog/GetItems",
-			"fields": {
-				"alternate_ids": alternate_ids,
-				"custom_tags": custom_tags,
-				"entity": entity,
-				"ids": ids,
-			},
-			"required_fields": [],
-			"required_headers": ["X-EntityToken"]
-		}
+	func _init() -> void:
+		super()
+		
+		req_path = "/Catalog/GetItems"
+		req_authentication_type = AuthenticationType.ENTITY_TOKEN
+		req_fields = [
+			"alternate_ids",
+			"custom_tags",
+			"entity",
+			"ids",
+			]
 	
 	func get_response_data() -> PlayFabEconomyModel.GetItemsResponse:
 		return super()
@@ -55,20 +54,22 @@ class GetIventoryItems extends PlayFabEconomy:
 	## OData Filter to refine the items returned. InventoryItem properties 'type', 'id', and 'stackId' can be used in the filter. For example: "type eq 'currency'".
 	var filter: String
 	
-	func get_config() -> Dictionary:
-		return {
-			"path": "/Inventory/GetInventoryItems",
-			"fields": {
-				"count": count,
-				"collection_id": collection_id,
-				"continuation_token": continuation_token,
-				"custom_tags": custom_tags,
-				"entity": entity,
-				"filter": filter,
-			},
-			"required_fields": ["count"],
-			"required_headers": ["X-EntityToken"]
-		}
+	func _init() -> void:
+		super()
+		
+		req_path = "/Inventory/GetInventoryItems"
+		req_authentication_type = AuthenticationType.ENTITY_TOKEN
+		req_fields = [
+			"count",
+			"collection_id",
+			"continuation_token",
+			"custom_tags",
+			"entity",
+			"filter",
+			]
+		req_required_fields = [
+			"count",
+			]
 	
 	func get_response_data() -> PlayFabEconomyModel.GetInventoryItemsResponse:
 		return super()
