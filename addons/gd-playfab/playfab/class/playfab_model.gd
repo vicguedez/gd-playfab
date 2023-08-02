@@ -801,3 +801,18 @@ class LoginResult extends AuthenticationResult:
 class RegisterPlayFabUserResult extends AuthenticationResult:
 	## PlayFab unique user name.
 	var username: String
+
+class EntityLineage extends PlayFabModel:
+	## The Character Id of the associated entity.
+	var character_id: String
+	## The Group Id of the associated entity.
+	var group_id: String
+	## The Master Player Account Id of the associated entity.
+	var master_player_account_id: String
+	## The Namespace Id of the associated entity.
+	var namespace_id: String
+	## The Title Id of the associated entity.
+	var title_id: String
+	## The Title Player Account Id of the associated entity.
+	var title_player_account_id: String
+
