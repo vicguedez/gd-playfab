@@ -185,15 +185,22 @@ func _on_input_text_changed() -> void:
 		
 		output.insert_text_at_caret("\t\t\n\t\treturn null\n")
 	elif _extend_httprequest:
-		output.insert_text_at_caret("\t\n\tfunc get_config() -> Dictionary:\n")
-		output.insert_text_at_caret("\t\treturn {\n")
-		output.insert_text_at_caret('\t\t\t"fields": {\n')
+		output.insert_text_at_caret("\t\n\tfunc _init() -> void:\n")
+		output.insert_text_at_caret("\t\tsuper()\n")
+		output.insert_text_at_caret("\t\t\n")
+		output.insert_text_at_caret("\t\treq_fields = [\n")
 		
 		for field in _fields:
-			output.insert_text_at_caret('\t\t\t\t"%s": %s,\n' % [field, field])
+			output.insert_text_at_caret('\t\t\t"%s",\n' % field)
 		
-		output.insert_text_at_caret('\t\t\t},\n')
-		output.insert_text_at_caret('\t\t\t"required_fields": %s,\n' % JSON.stringify(_required_fields))
-		output.insert_text_at_caret("\t\t}\n")
+		output.insert_text_at_caret("\t\t\t]\n")
+		
+		if not _required_fields.is_empty():
+			output.insert_text_at_caret("\t\treq_required_fields = [\n")
+			
+			for field in _required_fields:
+				output.insert_text_at_caret('\t\t\t"%s",\n' % field)
+			
+			output.insert_text_at_caret("\t\t\t]\n")
 	
 	output.insert_text_at_caret("\n")
