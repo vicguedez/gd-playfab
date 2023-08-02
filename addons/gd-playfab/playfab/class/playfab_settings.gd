@@ -25,3 +25,12 @@ static func clear_authentication() -> void:
 	authentication_context.entity_type = ""
 	authentication_context.entity_token = ""
 	authentication_context.session_token = ""
+
+static func get_playfab_id() -> String:
+	return authentication_context.playfab_id
+
+static func get_entity_token() -> String:
+	return authentication_context.entity_token
+
+static func get_session_token() -> String:
+	return authentication_context.session_token
