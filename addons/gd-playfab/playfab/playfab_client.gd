@@ -52,7 +52,7 @@ class RegisterPlayFabUser extends PlayFabClient:
 	## Player secret that is used to verify API request signatures (Enterprise Only).
 	var player_secret: String
 	## An optional parameter that specifies whether both the username and email parameters are required. If true, both parameters are required; if false, the user must supply either the username or email parameter. The default value is true.
-	var require_both_username_and_email: bool
+	var require_both_username_and_email: bool = true
 	## PlayFab username for the account (3-20 characters).
 	var username: String
 	
