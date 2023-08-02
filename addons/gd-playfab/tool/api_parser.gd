@@ -11,9 +11,11 @@ enum Extend {
 	PLAY_FAB_HTTP_REQUEST,
 	PLAY_FAB_CLIENT,
 	PLAY_FAB_ECONOMY,
+	PLAY_FAB_AUTHENTICATION,
 	PLAY_FAB_MODEL=100,
 	PLAY_FAB_CLIENT_MODEL,
 	PLAY_FAB_ECONOMY_MODEL,
+	PLAY_FAB_AUTHENTICATION_MODEL,
 }
 
 @onready
@@ -63,7 +65,7 @@ func _on_input_text_changed() -> void:
 	if input.text.is_empty():
 		return
 	
-	var input_text = RegEx.create_from_string("(\\ \\t\\t\\n\\n|\\ \\t\\n\\n|\\n\\t\\n\\n|\\n\\t)").sub(input.text.strip_edges(), "\t", true)
+	var input_text = RegEx.create_from_string("(\\ \\t\\t\\n\\n|\\ \\t\\n\\n\\s*|\\n*\\n\\t\\n\\n|\\n\\t)").sub(input.text.strip_edges(), "\t", true)
 	var lines: PackedStringArray = input_text.split("\n", false)
 	var first_line = true;
 	
