@@ -3,6 +3,7 @@ extends RefCounted
 class_name PlayFabSettings
 
 static var title_id: String
+static var developer_secret_key: String
 
 static var authentication_context = {
 	"playfab_id": "",

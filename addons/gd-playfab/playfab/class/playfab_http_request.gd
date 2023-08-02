@@ -7,6 +7,13 @@ signal completed(result: HTTPRequest.Result, response_code: int, headers: Packed
 ## Emitted after completed, passes itself as an argument.
 signal finished(request)
 
+enum AuthenticationType {
+	NONE,
+	ENTITY_TOKEN,
+	SESSION_TICKET,
+	DEVELOPER_SECRET_KEY,
+	}
+
 const SDK_VERSION = "1.0"
 const SUCCESS_CODES = [
 	HTTPClient.RESPONSE_OK,
@@ -23,6 +30,8 @@ var api_url = "playfabapi.com"
 var api_version = "230721"
 ## Do not use unless you know what you are doing.
 var http: HTTPRequest
+## Sets the authentication type to be used by this request.
+var authentication_type: AuthenticationType = AuthenticationType.NONE
 
 var _requesting = false
 var _completed = {}
@@ -133,11 +142,14 @@ func send() -> Error:
 		"X-PlayFabSDK: " + sdk_header
 	]
 	
-	for header in get_required_headers():
-		if header == "X-EntityToken":
-			headers.append("X-EntityToken: %s" % PlayFabSettings.authentication_context.entity_token)
-		elif header == "X-SecretKey":
-			headers.append("X-SecretKey: %s" % PlayFabSettings.authentication_context.secret_key)
+	headers.append_array(get_required_headers())
+	
+	if authentication_type == AuthenticationType.ENTITY_TOKEN:
+		headers.append("X-EntityToken: %s" % PlayFabSettings.get_entity_token())
+	elif authentication_type == AuthenticationType.SESSION_TICKET:
+		headers.append("X-Authorization: %s" % PlayFabSettings.get_session_token())
+	elif authentication_type == AuthenticationType.DEVELOPER_SECRET_KEY:
+		headers.append("X-SecretKey: %s" % PlayFabSettings.developer_secret_key)
 	
 	var attempt = http.request(url, PackedStringArray(headers), method, data)
 	
