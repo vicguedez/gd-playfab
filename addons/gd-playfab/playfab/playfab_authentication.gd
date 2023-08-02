@@ -9,13 +9,13 @@ class GetEntityToken extends PlayFabAuthentication:
 	var entity: PlayFabAuthenticationModel.EntityKey = PlayFabAuthenticationModel.EntityKey.new()
 	
 	func _init() -> void:
-		super()
-		
 		req_path = "/Authentication/GetEntityToken"
 		req_fields = [
 			"custom_tags",
 			"entity",
 			]
+		
+		super()
 	
 	func get_response_data() -> PlayFabAuthenticationModel.EntityTokenResponse:
 		return super()
@@ -31,13 +31,13 @@ class ValidateEntityToken extends PlayFabAuthentication:
 	var entity_token: String
 	
 	func _init() -> void:
-		super()
-		
 		req_path = "/Authentication/ValidateEntityToken"
 		req_fields = [
 			"custom_tags",
 			"entity_token",
 			]
+		
+		super()
 	
 	func get_response_data() -> PlayFabAuthenticationModel.ValidateEntityTokenResponse:
 		return super()

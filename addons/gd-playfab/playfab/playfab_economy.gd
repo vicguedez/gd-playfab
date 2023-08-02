@@ -22,8 +22,6 @@ class GetItems extends PlayFabEconomy:
 	var ids: Array[String]
 	
 	func _init() -> void:
-		super()
-		
 		req_path = "/Catalog/GetItems"
 		req_authentication_type = AuthenticationType.ENTITY_TOKEN
 		req_fields = [
@@ -32,6 +30,8 @@ class GetItems extends PlayFabEconomy:
 			"entity",
 			"ids",
 			]
+		
+		super()
 	
 	func get_response_data() -> PlayFabEconomyModel.GetItemsResponse:
 		return super()
@@ -55,8 +55,6 @@ class GetIventoryItems extends PlayFabEconomy:
 	var filter: String
 	
 	func _init() -> void:
-		super()
-		
 		req_path = "/Inventory/GetInventoryItems"
 		req_authentication_type = AuthenticationType.ENTITY_TOKEN
 		req_fields = [
@@ -70,6 +68,8 @@ class GetIventoryItems extends PlayFabEconomy:
 		req_required_fields = [
 			"count",
 			]
+		
+		super()
 	
 	func get_response_data() -> PlayFabEconomyModel.GetInventoryItemsResponse:
 		return super()

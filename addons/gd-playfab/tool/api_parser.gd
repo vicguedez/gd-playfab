@@ -186,8 +186,6 @@ func _on_input_text_changed() -> void:
 		output.insert_text_at_caret("\t\t\n\t\treturn null\n")
 	elif _extend_httprequest:
 		output.insert_text_at_caret("\t\n\tfunc _init() -> void:\n")
-		output.insert_text_at_caret("\t\tsuper()\n")
-		output.insert_text_at_caret("\t\t\n")
 		output.insert_text_at_caret("\t\treq_fields = [\n")
 		
 		for field in _fields:
@@ -202,5 +200,8 @@ func _on_input_text_changed() -> void:
 				output.insert_text_at_caret('\t\t\t"%s",\n' % field)
 			
 			output.insert_text_at_caret("\t\t\t]\n")
+		
+		output.insert_text_at_caret("\t\t\n")
+		output.insert_text_at_caret("\t\tsuper()\n")
 	
 	output.insert_text_at_caret("\n")

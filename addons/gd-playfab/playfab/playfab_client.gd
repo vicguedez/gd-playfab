@@ -16,8 +16,6 @@ class LoginWithEmailAddress extends PlayFabClient:
 	var info_request_parameters: PlayFabClientModel.GetPlayerCombinedInfoRequestParams = PlayFabClientModel.GetPlayerCombinedInfoRequestParams.new()
 	
 	func _init() -> void:
-		super()
-		
 		req_path = "/Client/LoginWithEmailAddress"
 		req_fields = [
 			"email",
@@ -31,6 +29,8 @@ class LoginWithEmailAddress extends PlayFabClient:
 			"password",
 			"title_id",
 			]
+		
+		super()
 	
 	func get_response_data() -> PlayFabClientModel.LoginResult:
 		return super()
@@ -61,8 +61,6 @@ class RegisterPlayFabUser extends PlayFabClient:
 	var username: String
 	
 	func _init() -> void:
-		super()
-		
 		req_path = "/Client/RegisterPlayFabUser"
 		req_fields = [
 			"title_id",
@@ -79,6 +77,8 @@ class RegisterPlayFabUser extends PlayFabClient:
 		req_required_fields = [
 			"title_id",
 			]
+		
+		super()
 	
 	func get_response_data() -> PlayFabClientModel.RegisterPlayFabUserResult:
 		return super()
