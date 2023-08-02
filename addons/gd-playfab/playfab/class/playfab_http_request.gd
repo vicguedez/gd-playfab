@@ -26,11 +26,14 @@ var http: HTTPRequest
 
 var _requesting = false
 var _completed = {}
+var _defaults = {}
 
 func _init() -> void:
 	http = PlayFab.get_http()
 	
 	set("title_id", PlayFabSettings.title_id)
+	
+	_store_fields_defaults()
 
 func _notification(what: int) -> void:
 	if what != NOTIFICATION_PREDELETE:
@@ -148,6 +151,26 @@ func send() -> Error:
 	
 	return OK
 
+# This only stores bool, int, float default values to prevent adding useless fields to the request.
+func _store_fields_defaults() -> void:
+	var defaults = {}
+	var fields = get_fields()
+	var required = get_required_fields()
+	
+	for key in fields:
+		var value = fields[key]
+		var value_type = typeof(value)
+		
+		if (
+				value_type == TYPE_BOOL
+				or value_type == TYPE_INT
+				or value_type == TYPE_FLOAT
+			):
+			
+			defaults[key] = value
+	
+	_defaults = defaults
+
 func _check_required_fields() -> bool:
 	for field in get_required_fields():
 		var value = get(field)
@@ -182,16 +205,26 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 			if key in required or value.is_dirty():
 				new_value = value.to_dictionary(keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
-			new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
+			if key in required or not value.is_empty():
+				new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
 		elif value_type == TYPE_DICTIONARY:
-			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+			if key in required or not value.is_empty():
+				new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+		elif value_type == TYPE_STRING:
+			if key in required or not value.is_empty():
+				new_value = value
+		elif value_type == TYPE_FLOAT:
+			if key in required or not is_equal_approx(value, _defaults[key]):
+				new_value = value
 		else:
-			new_value = value
+			if key in required or value != _defaults[key]:
+				new_value = value
 		
 		if keys_pascal_case:
 			key = key.to_pascal_case()
 		
-		dict[key] = new_value
+		if new_value != null:
+			dict[key] = new_value
 	
 	return dict
 
