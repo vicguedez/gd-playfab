@@ -12,10 +12,12 @@ enum Extend {
 	PLAY_FAB_CLIENT,
 	PLAY_FAB_ECONOMY,
 	PLAY_FAB_AUTHENTICATION,
+	PLAY_FAB_SERVER,
 	PLAY_FAB_MODEL=100,
 	PLAY_FAB_CLIENT_MODEL,
 	PLAY_FAB_ECONOMY_MODEL,
 	PLAY_FAB_AUTHENTICATION_MODEL,
+	PLAY_FAB_SERVER_MODEL,
 }
 
 @onready
@@ -186,6 +188,7 @@ func _on_input_text_changed() -> void:
 		output.insert_text_at_caret("\t\t\n\t\treturn null\n")
 	elif _extend_httprequest:
 		output.insert_text_at_caret("\t\n\tfunc _init() -> void:\n")
+		output.insert_text_at_caret("\t\treq_path = _SetMe\n")
 		output.insert_text_at_caret("\t\treq_fields = [\n")
 		
 		for field in _fields:
@@ -203,5 +206,11 @@ func _on_input_text_changed() -> void:
 		
 		output.insert_text_at_caret("\t\t\n")
 		output.insert_text_at_caret("\t\tsuper()\n")
+		
+		output.insert_text_at_caret("\t\n\tfunc get_response_data() -> _SetMe:\n")
+		output.insert_text_at_caret("\t\treturn super()\n")
+		
+		output.insert_text_at_caret("\t\n\tfunc _new_result_model() -> _SetMe:\n")
+		output.insert_text_at_caret("\t\treturn _SetMe.new()\n")
 	
 	output.insert_text_at_caret("\n")
