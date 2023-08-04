@@ -4,21 +4,24 @@ class_name PlayFabSettings
 
 static var title_id: String
 static var developer_secret_key: String
-
 static var authentication_context = {
 	"playfab_id": "",
 	"entity_id": "",
 	"entity_type": "",
 	"entity_token": "",
 	"session_token": ""
-}
+	}
 
 static func set_authentication(result: PlayFabModel.AuthenticationResult) -> void:
 	authentication_context.playfab_id = result.play_fab_id
-	authentication_context.entity_id = result.entity_token.entity.id
-	authentication_context.entity_type = result.entity_token.entity.type
-	authentication_context.entity_token = result.entity_token.entity_token
 	authentication_context.session_token = result.session_ticket
+	
+	set_entity_token(result.entity_token)
+
+static func set_entity_token(response: PlayFabModel.EntityTokenResponse) -> void:
+	authentication_context.entity_id = response.entity.id
+	authentication_context.entity_type = response.entity.type
+	authentication_context.entity_token = response.entity_token
 
 static func clear_authentication() -> void:
 	authentication_context.playfab_id = ""
