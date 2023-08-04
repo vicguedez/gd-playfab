@@ -32,6 +32,7 @@ class ValidateEntityToken extends PlayFabAuthentication:
 	
 	func _init() -> void:
 		req_path = "/Authentication/ValidateEntityToken"
+		req_authentication_type = AuthenticationType.ENTITY_TOKEN
 		req_fields = [
 			"custom_tags",
 			"entity_token",
