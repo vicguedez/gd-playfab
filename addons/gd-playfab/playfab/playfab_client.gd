@@ -85,4 +85,3 @@ class RegisterPlayFabUser extends PlayFabClient:
 	
 	func _new_result_model() -> PlayFabClientModel.RegisterPlayFabUserResult:
 		return PlayFabClientModel.RegisterPlayFabUserResult.new()
-

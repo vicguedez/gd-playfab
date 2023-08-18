@@ -1,6 +1,7 @@
 extends PlayFabHttpRequest
 class_name PlayFabServer
 
+## Validated a client's session ticket, and if successful, returns details for that user
 class AuthenticateSessionTicket extends PlayFabServer:
 	## Session ticket as issued by a PlayFab client login API.
 	var session_ticket: String
