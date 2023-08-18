@@ -35,6 +35,7 @@ class GetPlayerCombinedInfo extends PlayFabServer:
 	
 	func _init() -> void:
 		req_path = "/Server/GetPlayerCombinedInfo"
+		req_authentication_type = AuthenticationType.DEVELOPER_SECRET_KEY
 		req_fields = [
 			"info_request_parameters",
 			"play_fab_id",
