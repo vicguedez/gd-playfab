@@ -585,24 +585,13 @@ class StatisticValue extends PlayFabModel:
 	## for updates to an existing statistic value for a player, the version of the statistic when it was loaded.
 	var version: float
 
-## Indicates whether a given data key is private (readable only by the player) or public (readable by all players). When a player makes a GetUserData request about another player, only keys marked Public will be returned.
-class UserDataPermission extends PlayFabModel:
-	var private: String
-	var public: String
-
 class UserDataRecord extends PlayFabModel:
 	## Timestamp for when this data was last updated.
 	var last_updated: String
 	## Indicates whether this data can be read by all users (public) or only the user (private). This is used for GetUserData requests being made by one player about another player.
-	var permission: UserDataPermission
+	var permission: String
 	## Data stored for the specified user data key.
 	var value: String
-	
-	func _property_get_revert(property: StringName) -> Variant:
-		if property == &"permission":
-			return UserDataPermission.new()
-		
-		return null
 
 class VirtualCurrencyRechargeTime extends PlayFabModel:
 	## Maximum value to which the regenerating currency will automatically increment. Note that it can exceed this value through use of the AddUserVirtualCurrency API call. However, it will not regenerate automatically until it has fallen below this value.
@@ -816,3 +805,20 @@ class EntityLineage extends PlayFabModel:
 	## The Title Player Account Id of the associated entity.
 	var title_player_account_id: String
 
+class GetUserDataResult extends PlayFabModel:
+	## User specific data for this title.
+	var data: UserDataRecord
+	## Indicates the current version of the data that has been set. This is incremented with every set call for that type of data (read-only, internal, etc). This version can be provided in Get calls to find updated data.
+	var data_version: float
+	## PlayFab unique identifier of the user whose custom data is being returned.
+	var play_fab_id: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"data":
+			return UserDataRecord.new()
+		
+		return null
+
+class UpdateUserDataResult extends PlayFabModel:
+	## Indicates the current version of the data that has been set. This is incremented with every set call for that type of data (read-only, internal, etc). This version can be provided in Get calls to find updated data.
+	var data_version: float
