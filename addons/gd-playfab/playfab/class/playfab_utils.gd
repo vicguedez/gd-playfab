@@ -30,7 +30,7 @@ static func dictionary_convert_models_to_dictionary(dict: Dictionary, keys_pasca
 		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dict()
+			new_value = value.to_dictionary(keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
 			new_value = array_convert_models_to_dictionary(value)
 		elif value_type == TYPE_DICTIONARY:
