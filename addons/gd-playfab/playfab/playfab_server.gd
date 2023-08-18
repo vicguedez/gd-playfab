@@ -95,3 +95,76 @@ class GetUserReadOnlyData extends GetUserData:
 		
 		req_path = "/Server/GetUserReadOnlyData"
 
+## Updates the title-specific custom data for the user which is readable and writable by the client
+class UpdateUserData extends PlayFabServer:
+	## Unique PlayFab assigned ID of the user on whom the operation will be performed.
+	var play_fab_id: String
+	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+	var custom_tags: Dictionary = {}
+	## Key-value pairs to be written to the custom data. Note that keys are trimmed of whitespace, are limited in size, and may not begin with a '!' character or be null.
+	var data: Dictionary = {}
+	## Optional list of Data-keys to remove from UserData. Some SDKs cannot insert null-values into Data due to language constraints. Use this to delete the keys directly.
+	var keys_to_remove: Array[String]
+	## Permission to be applied to all user data keys written in this request. Defaults to "private" if not set.
+	var permission: String
+	
+	func _init() -> void:
+		req_path = "/Server/UpdateUserData"
+		req_authentication_type = AuthenticationType.DEVELOPER_SECRET_KEY
+		req_fields = [
+			"play_fab_id",
+			"custom_tags",
+			"data",
+			"keys_to_remove",
+			"permission",
+			]
+		req_required_fields = [
+			"play_fab_id",
+			]
+		
+		super()
+	
+	func get_response_data() -> PlayFabServerModel.UpdateUserDataResult:
+		return super()
+	
+	func _new_result_model() -> PlayFabServerModel.UpdateUserDataResult:
+		return PlayFabServerModel.UpdateUserDataResult.new()
+
+## Updates the title-specific custom data for the user which cannot be accessed by the client
+class UpdateUserInternalData extends PlayFabServer:
+	## Unique PlayFab assigned ID of the user on whom the operation will be performed.
+	var play_fab_id: String
+	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+	var custom_tags: Dictionary = {}
+	## Key-value pairs to be written to the custom data. Note that keys are trimmed of whitespace, are limited in size, and may not begin with a '!' character or be null.
+	var data: Dictionary = {}
+	## Optional list of Data-keys to remove from UserData. Some SDKs cannot insert null-values into Data due to language constraints. Use this to delete the keys directly.
+	var keys_to_remove: Array[String]
+	
+	func _init() -> void:
+		req_path = "/Server/UpdateUserInternalData"
+		req_authentication_type = AuthenticationType.DEVELOPER_SECRET_KEY
+		req_fields = [
+			"play_fab_id",
+			"custom_tags",
+			"data",
+			"keys_to_remove",
+			]
+		req_required_fields = [
+			"play_fab_id",
+			]
+		
+		super()
+	
+	func get_response_data() -> PlayFabServerModel.UpdateUserDataResult:
+		return super()
+	
+	func _new_result_model() -> PlayFabServerModel.UpdateUserDataResult:
+		return PlayFabServerModel.UpdateUserDataResult.new()
+
+## Updates the title-specific custom data for the user which can only be read by the client
+class UpdateUserReadOnlyData extends UpdateUserData:
+	func _init() -> void:
+		super()
+		
+		req_path = "/Server/UpdateUserReadOnlyData"
