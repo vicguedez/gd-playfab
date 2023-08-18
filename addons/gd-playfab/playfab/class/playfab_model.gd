@@ -628,14 +628,14 @@ class GetPlayerCombinedInfoResultPayload extends PlayFabModel:
 	var player_statistics: Array[StatisticValue]
 	## Title data for this title.
 	var title_data: Dictionary
-	## User specific custom data.
-	var user_data: UserDataRecord
+	## User specific custom data. Values are of type UserDataRecord.
+	var user_data: Dictionary
 	## The version of the UserData that was returned.
 	var user_data_version: float
 	## Array of inventory items in the user's current inventory.
 	var user_inventory: Array[ItemInstance]
-	## User specific read-only data.
-	var user_read_only_data: UserDataRecord
+	## User specific read-only data. Values are of type UserDataRecord.
+	var user_read_only_data: Dictionary
 	## The version of the Read-Only UserData that was returned.
 	var user_read_only_data_version: float
 	## Dictionary of virtual currency balance(s) belonging to the user.
@@ -820,8 +820,8 @@ class EntityLineage extends PlayFabModel:
 	var title_player_account_id: String
 
 class GetUserDataResult extends PlayFabModel:
-	## User specific data for this title.
-	var data: UserDataRecord
+	## User specific data for this title. Values are of type UserDataRecord.
+	var data: Dictionary
 	## Indicates the current version of the data that has been set. This is incremented with every set call for that type of data (read-only, internal, etc). This version can be provided in Get calls to find updated data.
 	var data_version: float
 	## PlayFab unique identifier of the user whose custom data is being returned.
