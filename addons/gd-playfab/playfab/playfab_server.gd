@@ -48,11 +48,11 @@ class GetPlayerCombinedInfo extends PlayFabServer:
 		
 		super()
 	
-	func get_response_data() -> PlayFabServerModel.GetPlayerCombinedInfoResultPayload:
+	func get_response_data() -> PlayFabServerModel.GetPlayerCombinedInfoResult:
 		return super()
 	
-	func _new_result_model() -> PlayFabServerModel.GetPlayerCombinedInfoResultPayload:
-		return PlayFabServerModel.GetPlayerCombinedInfoResultPayload.new()
+	func _new_result_model() -> PlayFabServerModel.GetPlayerCombinedInfoResult:
+		return PlayFabServerModel.GetPlayerCombinedInfoResult.new()
 
 ## Retrieves the title-specific custom data for the user which is readable and writable by the client
 class GetUserData extends PlayFabServer:
