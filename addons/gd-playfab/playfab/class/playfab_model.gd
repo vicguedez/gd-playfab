@@ -822,3 +822,15 @@ class GetUserDataResult extends PlayFabModel:
 class UpdateUserDataResult extends PlayFabModel:
 	## Indicates the current version of the data that has been set. This is incremented with every set call for that type of data (read-only, internal, etc). This version can be provided in Get calls to find updated data.
 	var data_version: float
+
+class GetPlayerCombinedInfoResult extends PlayFabModel:
+	## Results for requested info.
+	var info_result_payload: GetPlayerCombinedInfoResultPayload
+	## Unique PlayFab assigned ID of the user on whom the operation will be performed.
+	var play_fab_id: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"info_result_payload":
+			return GetPlayerCombinedInfoResultPayload.new()
+		
+		return null
