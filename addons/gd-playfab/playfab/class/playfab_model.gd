@@ -80,13 +80,18 @@ func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
 		# GDScript lacks typed dicts or structs, this is a little hack.
 		# If a prop is typed as dict but has a revert default value,
 		# it means all its values are a Model.
-		elif prop.type == TYPE_DICTIONARY and property_can_revert(prop.name):
+		elif (
+				value != null
+				and prop.type == TYPE_DICTIONARY
+				and property_get_revert(prop.name) != null
+			):
+			
 			var typed_dict = {}
 			
 			for key in value:
 				var value_model := property_get_revert(prop.name) as PlayFabModel
 				
-				value_model.parse_dictionary(value, dict_is_body_response)
+				value_model.parse_dictionary(value[key], dict_is_body_response)
 				
 				typed_dict[key] = value_model
 			
