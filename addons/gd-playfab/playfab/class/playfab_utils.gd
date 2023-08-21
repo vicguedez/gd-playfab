@@ -38,9 +38,6 @@ static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys
 		else:
 			new_value = value
 		
-		if keys_pascal_case:
-			key = key.to_pascal_case()
-		
 		new_dict[key] = new_value
 	
 	return new_dict
