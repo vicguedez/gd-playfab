@@ -1,29 +1,46 @@
 extends RefCounted
 class_name PlayFabModel
 
+var _defaults = {}
+
+func _init() -> void:
+	_store_defaults()
+
 ## Returns the whole model as a Dictionary, any model within it will be converted as well.
-func to_dictionary(keys_pascal_case = false) -> Dictionary:
+func to_dictionary(keys_pascal_case = false, only_dirty_props = false) -> Dictionary:
 	var dict = {}
 	var prop_list = get_property_list()
 	
 	for prop in prop_list:
-		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
+		if not _can_use_prop(prop):
 			continue
 		
-		var value = get(prop.name)
-		var new_value = value
+		var key: String = prop.name
+		var value = get(key)
+		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary(keys_pascal_case)
+			if not only_dirty_props or value.is_dirty():
+				new_value = value.to_dictionary(keys_pascal_case)
 		elif prop.type == TYPE_ARRAY:
-			new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
+			if not only_dirty_props or not value.is_empty():
+				new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
 		elif prop.type == TYPE_DICTIONARY:
-			new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+			if not only_dirty_props or not value.is_empty():
+				new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+		else:
+			var default = _defaults.get(key, null)
+			
+			if not only_dirty_props or str(default) != str(value):
+				new_value = value
+		
+		if new_value == null:
+			continue
 		
 		if keys_pascal_case:
-			dict[prop.name.to_pascal_case()] = new_value
-		else:
-			dict[prop.name] = new_value
+			key = key.to_pascal_case()
+		
+		dict[key] = new_value
 	
 	return dict
 
@@ -32,7 +49,7 @@ func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
 	var prop_list = get_property_list()
 	
 	for prop in prop_list:
-		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
+		if not _can_use_prop(prop):
 			continue
 		
 		var prop_key: String = prop.name
@@ -104,7 +121,7 @@ func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
 ## Returns true if any property has been altered from its default value.
 func is_dirty() -> bool:
 	for prop in get_property_list():
-		if prop.usage != PROPERTY_USAGE_SCRIPT_VARIABLE:
+		if not _can_use_prop(prop):
 			continue
 		
 		var value = get(prop.name)
@@ -115,14 +132,44 @@ func is_dirty() -> bool:
 			return true
 		elif prop.type == TYPE_DICTIONARY and not value.is_empty():
 			return true
-		elif prop.type == TYPE_STRING and not value.is_empty():
-			return true
-		elif prop.type == TYPE_INT and not value == 0:
-			return true
-		elif prop.type == TYPE_FLOAT and not is_equal_approx(value, 0.0):
+		
+		var default = _defaults.get(prop.name)
+		
+		if str(default) != str(value):
 			return true
 	
 	return false
+
+# Prevents adding private fields to the Model when converting to/from dict.
+func _can_use_prop(prop: Dictionary) -> bool:
+	return (
+		prop.usage == PROPERTY_USAGE_SCRIPT_VARIABLE
+		and prop.name != "_defaults"
+	)
+
+# This only stores bool, int, float and String default values, later used to check
+# if a prop can be considered dirty.
+func _store_defaults() -> void:
+	var defaults = {}
+	var prop_list = get_property_list()
+	
+	for prop in prop_list:
+		if not _can_use_prop(prop):
+			continue
+		
+		var value = get(prop.name)
+		var value_type = typeof(value)
+		
+		if (
+				value_type == TYPE_BOOL
+				or value_type == TYPE_INT
+				or value_type == TYPE_FLOAT
+				or value_type == TYPE_STRING
+			):
+			
+			defaults[prop.name] = value
+	
+	_defaults = defaults
 
 ## Combined entity type and ID structure which uniquely identifies a single entity.
 class EntityKey extends PlayFabModel:

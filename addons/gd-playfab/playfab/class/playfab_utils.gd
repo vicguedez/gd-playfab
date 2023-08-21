@@ -1,7 +1,7 @@
 extends RefCounted
 class_name PlayFabUtils
 
-static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_case = false) -> Array:
+static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_case = false, model_only_dirty_props = false) -> Array:
 	var new_array = []
 	
 	for value in array:
@@ -9,11 +9,11 @@ static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_c
 		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary(model_keys_pascal_case)
+			new_value = value.to_dictionary(model_keys_pascal_case, model_only_dirty_props)
 		elif value_type == TYPE_ARRAY:
-			new_value = array_convert_models_to_dictionary(value, model_keys_pascal_case)
+			new_value = array_convert_models_to_dictionary(value, model_keys_pascal_case, model_only_dirty_props)
 		elif value_type == TYPE_DICTIONARY:
-			new_value = dictionary_convert_models_to_dictionary(value, model_keys_pascal_case)
+			new_value = dictionary_convert_models_to_dictionary(value, model_keys_pascal_case, model_only_dirty_props)
 		else:
 			new_value = value
 		
@@ -21,7 +21,7 @@ static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_c
 	
 	return new_array
 
-static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys_pascal_case = false) -> Dictionary:
+static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys_pascal_case = false, model_only_dirty_props = false) -> Dictionary:
 	var new_dict = {}
 	
 	for key in dict:
@@ -30,11 +30,11 @@ static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys
 		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary(model_keys_pascal_case)
+			new_value = value.to_dictionary(model_keys_pascal_case, model_only_dirty_props)
 		elif value_type == TYPE_ARRAY:
-			new_value = array_convert_models_to_dictionary(value)
+			new_value = array_convert_models_to_dictionary(value, model_only_dirty_props)
 		elif value_type == TYPE_DICTIONARY:
-			new_value = dictionary_convert_models_to_dictionary(value)
+			new_value = dictionary_convert_models_to_dictionary(value, model_only_dirty_props)
 		else:
 			new_value = value
 		
