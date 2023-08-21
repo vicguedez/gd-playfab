@@ -111,10 +111,11 @@ func send() -> Error:
 	
 	var sdk_header = "GDPlayFab-%s.%s" % [SDK_VERSION, req_api_version]
 	var model_keys_pascal_case = true
+	var model_only_dirty_props = true
 	var data = ""
 	
 	if req_method == HTTPClient.METHOD_POST:
-		data = JSON.stringify(_get_fields_as_dictionary(model_keys_pascal_case))
+		data = JSON.stringify(_get_fields_as_dictionary(model_keys_pascal_case, model_only_dirty_props))
 	
 	var url = "https://%s.%s%s?sdk=%s" % [PlayFabSettings.title_id, req_api_url, req_path, sdk_header]
 	var headers = req_extra_headers.duplicate(true)
@@ -144,7 +145,7 @@ func send() -> Error:
 	
 	return OK
 
-# This only stores bool, int, float default values to prevent adding useless fields to the request.
+# This only stores bool, int, float and String default values to prevent adding useless fields to the request.
 func _store_fields_defaults() -> void:
 	var defaults = {}
 	
@@ -156,6 +157,7 @@ func _store_fields_defaults() -> void:
 				value_type == TYPE_BOOL
 				or value_type == TYPE_INT
 				or value_type == TYPE_FLOAT
+				or value_type == TYPE_STRING
 			):
 			
 			defaults[_field] = value
@@ -182,7 +184,7 @@ func _check_required_fields() -> bool:
 	
 	return true
 
-func _get_fields_as_dictionary(model_keys_pascal_case = false) -> Dictionary:
+func _get_fields_as_dictionary(model_keys_pascal_case = false, model_only_dirty_props = false) -> Dictionary:
 	var dict = {}
 	
 	for _field in req_fields:
@@ -192,21 +194,17 @@ func _get_fields_as_dictionary(model_keys_pascal_case = false) -> Dictionary:
 		
 		if value is PlayFabModel:
 			if _field in req_required_fields or value.is_dirty():
-				new_value = value.to_dictionary(model_keys_pascal_case)
+				new_value = value.to_dictionary(model_keys_pascal_case, model_only_dirty_props)
 		elif value_type == TYPE_ARRAY:
 			if _field in req_required_fields or not value.is_empty():
-				new_value = PlayFabUtils.array_convert_models_to_dictionary(value, model_keys_pascal_case)
+				new_value = PlayFabUtils.array_convert_models_to_dictionary(value, model_keys_pascal_case, model_only_dirty_props)
 		elif value_type == TYPE_DICTIONARY:
 			if _field in req_required_fields or not value.is_empty():
-				new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, model_keys_pascal_case)
-		elif value_type == TYPE_STRING:
-			if _field in req_required_fields or not value.is_empty():
-				new_value = value
-		elif value_type == TYPE_FLOAT:
-			if _field in req_required_fields or not is_equal_approx(value, _defaults[_field]):
-				new_value = value
+				new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, model_keys_pascal_case, model_only_dirty_props)
 		else:
-			if _field in req_required_fields or value != _defaults[_field]:
+			var default = _defaults.get(_field)
+			
+			if _field in req_required_fields or str(default) != str(value):
 				new_value = value
 		
 		if model_keys_pascal_case:
