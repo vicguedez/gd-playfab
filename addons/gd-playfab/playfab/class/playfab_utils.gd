@@ -1,7 +1,7 @@
 extends RefCounted
 class_name PlayFabUtils
 
-static func array_convert_models_to_dictionary(array: Array, keys_pascal_case = false) -> Array:
+static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_case = false) -> Array:
 	var new_array = []
 	
 	for value in array:
@@ -9,11 +9,11 @@ static func array_convert_models_to_dictionary(array: Array, keys_pascal_case = 
 		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary(keys_pascal_case)
+			new_value = value.to_dictionary(model_keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
-			new_value = array_convert_models_to_dictionary(value, keys_pascal_case)
+			new_value = array_convert_models_to_dictionary(value, model_keys_pascal_case)
 		elif value_type == TYPE_DICTIONARY:
-			new_value = dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+			new_value = dictionary_convert_models_to_dictionary(value, model_keys_pascal_case)
 		else:
 			new_value = value
 		
@@ -21,7 +21,7 @@ static func array_convert_models_to_dictionary(array: Array, keys_pascal_case = 
 	
 	return new_array
 
-static func dictionary_convert_models_to_dictionary(dict: Dictionary, keys_pascal_case = false) -> Dictionary:
+static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys_pascal_case = false) -> Dictionary:
 	var new_dict = {}
 	
 	for key in dict:
@@ -30,7 +30,7 @@ static func dictionary_convert_models_to_dictionary(dict: Dictionary, keys_pasca
 		var new_value
 		
 		if value is PlayFabModel:
-			new_value = value.to_dictionary(keys_pascal_case)
+			new_value = value.to_dictionary(model_keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
 			new_value = array_convert_models_to_dictionary(value)
 		elif value_type == TYPE_DICTIONARY:

@@ -110,11 +110,11 @@ func send() -> Error:
 		return FAILED
 	
 	var sdk_header = "GDPlayFab-%s.%s" % [SDK_VERSION, req_api_version]
-	var keys_pascal_case = true
+	var model_keys_pascal_case = true
 	var data = ""
 	
 	if req_method == HTTPClient.METHOD_POST:
-		data = JSON.stringify(_get_fields_as_dictionary(keys_pascal_case))
+		data = JSON.stringify(_get_fields_as_dictionary(model_keys_pascal_case))
 	
 	var url = "https://%s.%s%s?sdk=%s" % [PlayFabSettings.title_id, req_api_url, req_path, sdk_header]
 	var headers = req_extra_headers.duplicate(true)
@@ -182,7 +182,7 @@ func _check_required_fields() -> bool:
 	
 	return true
 
-func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
+func _get_fields_as_dictionary(model_keys_pascal_case = false) -> Dictionary:
 	var dict = {}
 	
 	for _field in req_fields:
@@ -192,13 +192,13 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 		
 		if value is PlayFabModel:
 			if _field in req_required_fields or value.is_dirty():
-				new_value = value.to_dictionary(keys_pascal_case)
+				new_value = value.to_dictionary(model_keys_pascal_case)
 		elif value_type == TYPE_ARRAY:
 			if _field in req_required_fields or not value.is_empty():
-				new_value = PlayFabUtils.array_convert_models_to_dictionary(value, keys_pascal_case)
+				new_value = PlayFabUtils.array_convert_models_to_dictionary(value, model_keys_pascal_case)
 		elif value_type == TYPE_DICTIONARY:
 			if _field in req_required_fields or not value.is_empty():
-				new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, keys_pascal_case)
+				new_value = PlayFabUtils.dictionary_convert_models_to_dictionary(value, model_keys_pascal_case)
 		elif value_type == TYPE_STRING:
 			if _field in req_required_fields or not value.is_empty():
 				new_value = value
@@ -209,7 +209,7 @@ func _get_fields_as_dictionary(keys_pascal_case = false) -> Dictionary:
 			if _field in req_required_fields or value != _defaults[_field]:
 				new_value = value
 		
-		if keys_pascal_case:
+		if model_keys_pascal_case:
 			_field = _field.to_pascal_case()
 		
 		if new_value != null:
