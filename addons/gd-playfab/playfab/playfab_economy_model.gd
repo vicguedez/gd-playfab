@@ -232,3 +232,10 @@ class GetInventoryItemsResponse extends PlayFabEconomyModel:
 	## The requested inventory items.
 	var items: Array[InventoryItem]
 
+class OperationInventoryItemsResponse extends PlayFabEconomyModel:
+	## ETags are used for concurrency checking when updating resources. More information about using ETags can be found here: https://learn.microsoft.com/en-us/gaming/playfab/features/economy-v2/catalog/etags.
+	var e_tag: String
+	## The idempotency id used in the request.
+	var idempotency_id: String
+	## The ids of transactions that occurred as a result of the request.
+	var transaction_ids: Array[String]

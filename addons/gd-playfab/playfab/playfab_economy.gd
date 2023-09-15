@@ -76,3 +76,38 @@ class GetIventoryItems extends PlayFabEconomy:
 	
 	func _new_result_model() -> PlayFabEconomyModel.GetInventoryItemsResponse:
 		return PlayFabEconomyModel.GetInventoryItemsResponse.new()
+
+## Update inventory items
+class UpdateInventoryItems extends PlayFabEconomy:
+	## The id of the entity's collection to perform this action on. (Default="default"). The number of inventory collections is unlimited.
+	var collection_id: String
+	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+	var custom_tags: Dictionary = {}
+	## ETags are used for concurrency checking when updating resources. More information about using ETags can be found here: https://learn.microsoft.com/en-us/gaming/playfab/features/economy-v2/catalog/etags.
+	var e_tag: String
+	## The entity to perform this action on.
+	var entity: PlayFabEconomyModel.EntityKey = PlayFabEconomyModel.EntityKey.new()
+	## The Idempotency ID for this request. Idempotency IDs can be used to prevent operation replay in the medium term but will be garbage collected eventually.
+	var idempotency_id: String
+	## The inventory item to update with the specified values.
+	var item: PlayFabEconomyModel.InventoryItem = PlayFabEconomyModel.InventoryItem.new()
+	
+	func _init() -> void:
+		req_path = "/Inventory/UpdateInventoryItems"
+		req_authentication_type = AuthenticationType.ENTITY_TOKEN
+		req_fields = [
+			"collection_id",
+			"custom_tags",
+			"e_tag",
+			"entity",
+			"idempotency_id",
+			"item",
+			]
+		
+		super()
+	
+	func get_response_data() -> PlayFabEconomyModel.OperationInventoryItemsResponse:
+		return super()
+	
+	func _new_result_model() -> PlayFabEconomyModel.OperationInventoryItemsResponse:
+		return PlayFabEconomyModel.OperationInventoryItemsResponse.new()
