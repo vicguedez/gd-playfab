@@ -706,6 +706,12 @@ class GetPlayerCombinedInfoResultPayload extends PlayFabModel:
 			return VirtualCurrencyRechargeTime.new()
 		
 		return null
+	
+	func get_user_data_record(key) -> UserDataRecord:
+		return user_data.get(key)
+	
+	func get_user_read_only_data_record(key) -> UserDataRecord:
+		return user_read_only_data.get(key)
 
 class UserSettings extends PlayFabModel:
 	## Boolean for whether this player is eligible for gathering device info.
@@ -884,6 +890,9 @@ class GetUserDataResult extends PlayFabModel:
 			return UserDataRecord.new()
 		
 		return null
+	
+	func get_data_record(key) -> UserDataRecord:
+		return data.get(key)
 
 class UpdateUserDataResult extends PlayFabModel:
 	## Indicates the current version of the data that has been set. This is incremented with every set call for that type of data (read-only, internal, etc). This version can be provided in Get calls to find updated data.
