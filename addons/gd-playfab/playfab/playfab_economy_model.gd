@@ -239,3 +239,22 @@ class OperationInventoryItemsResponse extends PlayFabEconomyModel:
 	var idempotency_id: String
 	## The ids of transactions that occurred as a result of the request.
 	var transaction_ids: Array[String]
+
+class InventoryItemReference extends PlayFabEconomyModel:
+	## The inventory item alternate id the request applies to.
+	var alternate_id: CatalogAlternateId
+	## The inventory item id the request applies to.
+	var id: String
+	## The inventory stack id the request should redeem to. (Default="default").
+	var stack_id: String
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"alternate_id":
+			return CatalogAlternateId.new()
+		
+		return null
+
+class ItemInitialValues extends PlayFabEconomyModel:
+	## Game specific properties for display purposes. The Display Properties field has a 1000 byte limit.
+	var display_properties: Dictionary
+
