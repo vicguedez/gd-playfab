@@ -50,6 +50,7 @@ var req_error_codes: Array = ERROR_CODES.duplicate()
 var _requesting = false
 var _completed = {}
 var _defaults = {}
+var _crypto = Crypto.new()
 
 func _init() -> void:
 	req_http = PlayFab.get_http()
@@ -191,6 +192,10 @@ func _get_fields_as_dictionary(model_keys_pascal_case = false, model_only_dirty_
 		var value = get(_field)
 		var value_type = typeof(value)
 		var new_value
+		
+		if _field == "idempotency_id":
+			if PlayFabSettings.auto_idempotency_id and value == "":
+				value = _crypto.generate_random_bytes(PlayFabSettings.auto_idempotency_id_bytes).hex_encode()
 		
 		if value is PlayFabModel:
 			if _field in req_required_fields or value.is_dirty():

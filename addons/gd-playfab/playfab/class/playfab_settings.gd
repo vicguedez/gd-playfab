@@ -4,6 +4,8 @@ class_name PlayFabSettings
 
 static var title_id: String
 static var developer_secret_key: String
+static var auto_idempotency_id: bool = false
+static var auto_idempotency_id_bytes: int = 16
 static var authentication_context = {
 	"playfab_id": "",
 	"entity_id": "",
