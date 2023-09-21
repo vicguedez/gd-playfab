@@ -258,3 +258,132 @@ class ItemInitialValues extends PlayFabEconomyModel:
 	## Game specific properties for display purposes. The Display Properties field has a 1000 byte limit.
 	var display_properties: Dictionary
 
+class PurchasePriceAmount extends PlayFabEconomyModel:
+	## The amount of the inventory item to use in the purchase .
+	var amount: float
+	## The inventory item id to use in the purchase .
+	var item_id: String
+	## The inventory stack id the to use in the purchase. Set to "default" by default.
+	var stack_id: String
+
+class InventoryItemsOperation extends PlayFabEconomyModel:
+	func get_type() -> String:
+		return ""
+
+class AddInventoryItemsOperation extends InventoryItemsOperation:
+	## The amount to add to the current item amount.
+	var amount: float
+	## The duration to add to the current item expiration date.
+	var duration_in_seconds: float
+	## The inventory item the operation applies to.
+	var item: InventoryItemReference
+	## The values to apply to a stack newly created by this operation.
+	var new_stack_values: ItemInitialValues
+	
+	func get_type() -> String:
+		return "Add"
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return InventoryItemReference.new()
+		elif property == &"new_stack_values":
+			return ItemInitialValues.new()
+		
+		return null
+
+class DeleteInventoryItemsOperation extends InventoryItemsOperation:
+	## The inventory item the operation applies to.
+	var item: InventoryItemReference
+	
+	func get_type() -> String:
+		return "Delete"
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return InventoryItemReference.new()
+		
+		return null
+
+class PurchaseInventoryItemsOperation extends InventoryItemsOperation:
+	## The amount to purchase.
+	var amount: float
+	## Indicates whether stacks reduced to an amount of 0 during the operation should be deleted from the inventory. (Default = false).
+	var delete_empty_stacks: bool
+	## The duration to purchase.
+	var duration_in_seconds: float
+	## The inventory item the operation applies to.
+	var item: InventoryItemReference
+	## The values to apply to a stack newly created by this operation.
+	var new_stack_values: ItemInitialValues
+	## The per-item price the item is expected to be purchased at. This must match a value configured in the Catalog or specified Store.
+	var price_amounts: Array[PurchasePriceAmount]
+	## The id of the Store to purchase the item from.
+	var store_id: String
+	
+	func get_type() -> String:
+		return "Purchase"
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return InventoryItemReference.new()
+		elif property == &"new_stack_values":
+			return ItemInitialValues.new()
+		
+		return null
+
+class SubtractInventoryItemsOperation extends InventoryItemsOperation:
+	## The amount to subtract from the current item amount.
+	var amount: float
+	## Indicates whether stacks reduced to an amount of 0 during the request should be deleted from the inventory. (Default = false).
+	var delete_empty_stacks: bool
+	## The duration to subtract from the current item expiration date.
+	var duration_in_seconds: float
+	## The inventory item the operation applies to.
+	var item: InventoryItemReference
+	
+	func get_type() -> String:
+		return "Subtract"
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return InventoryItemReference.new()
+		
+		return null
+
+class TransferInventoryItemsOperation extends InventoryItemsOperation:
+	## The amount to transfer.
+	var amount: float
+	## Indicates whether stacks reduced to an amount of 0 during the operation should be deleted from the inventory. (Default = false).
+	var delete_empty_stacks: bool
+	## The inventory item the operation is transferring from.
+	var giving_item: InventoryItemReference
+	## The values to apply to a stack newly created by this operation.
+	var new_stack_values: ItemInitialValues
+	## The inventory item the operation is transferring to.
+	var receiving_item: InventoryItemReference
+	
+	func get_type() -> String:
+		return "Transfer"
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"giving_item":
+			return InventoryItemReference.new()
+		elif property == &"new_stack_values":
+			return ItemInitialValues.new()
+		elif property == &"receiving_item":
+			return InventoryItemReference.new()
+		
+		return null
+
+class UpdateInventoryItemsOperation extends InventoryItemsOperation:
+	## The inventory item to update with the specified values.
+	var item: InventoryItem
+	
+	func get_type() -> String:
+		return "Update"
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return InventoryItem.new()
+		
+		return null

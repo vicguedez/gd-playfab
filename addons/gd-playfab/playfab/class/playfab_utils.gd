@@ -8,7 +8,10 @@ static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_c
 		var value_type = typeof(value)
 		var new_value
 		
-		if value is PlayFabModel:
+		if value is PlayFabEconomyModel.InventoryItemsOperation:
+			new_value = {}
+			new_value[value.get_type()] = value.to_dictionary(model_keys_pascal_case, model_only_dirty_props)
+		elif value is PlayFabModel:
 			new_value = value.to_dictionary(model_keys_pascal_case, model_only_dirty_props)
 		elif value_type == TYPE_ARRAY:
 			new_value = array_convert_models_to_dictionary(value, model_keys_pascal_case, model_only_dirty_props)

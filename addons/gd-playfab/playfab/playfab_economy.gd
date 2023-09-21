@@ -202,3 +202,39 @@ class SubtractInventoryItems extends PlayFabEconomy:
 	
 	func _new_result_model() -> PlayFabEconomyModel.OperationInventoryItemsResponse:
 		return PlayFabEconomyModel.OperationInventoryItemsResponse.new()
+
+## Execute a list of Inventory Operations. A maximum list of 10 operations can be performed by a single request. There is also a limit to 250 items that can be modified/added in a single request. For example, adding a bundle with 50 items counts as 50 items modified. All operations must be done within a single inventory collection. This API has a reduced RPS compared to an individual inventory operation with Player Entities limited to 15 requests in 90 seconds and Title Entities limited to 500 requests in 10 seconds.
+class ExecuteInventoryOperations extends PlayFabEconomy:
+	## The id of the entity's collection to perform this action on. (Default="default"). The number of inventory collections is unlimited.
+	var collection_id: String
+	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+	var custom_tags: Dictionary = {}
+	## ETags are used for concurrency checking when updating resources. More information about using ETags can be found here: https://learn.microsoft.com/en-us/gaming/playfab/features/economy-v2/catalog/etags.
+	var e_tag: String
+	## The entity to perform this action on.
+	var entity: PlayFabEconomyModel.EntityKey = PlayFabEconomyModel.EntityKey.new()
+	## The Idempotency ID for this request. Idempotency IDs can be used to prevent operation replay in the medium term but will be garbage collected eventually.
+	var idempotency_id: String
+	## The operations to run transactionally. The operations will be executed in-order sequentially and will succeed or fail as a batch. Up to 10 operations can be added.
+	var operations: Array[PlayFabEconomyModel.InventoryItemsOperation] = []
+	
+	func _init() -> void:
+		req_path = "/Inventory/ExecuteInventoryOperations"
+		req_authentication_type = AuthenticationType.ENTITY_TOKEN
+		req_fields = [
+			"collection_id",
+			"custom_tags",
+			"e_tag",
+			"entity",
+			"idempotency_id",
+			"operations",
+			]
+		
+		super()
+	
+	func get_response_data() -> PlayFabEconomyModel.OperationInventoryItemsResponse:
+		return super()
+	
+	func _new_result_model() -> PlayFabEconomyModel.OperationInventoryItemsResponse:
+		return PlayFabEconomyModel.OperationInventoryItemsResponse.new()
+
