@@ -387,3 +387,14 @@ class UpdateInventoryItemsOperation extends InventoryItemsOperation:
 			return InventoryItem.new()
 		
 		return null
+
+## Get item result.
+class GetItemResponse extends PlayFabEconomyModel:
+	## The item result.
+	var item: CatalogItem
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return CatalogItem.new()
+		
+		return null
