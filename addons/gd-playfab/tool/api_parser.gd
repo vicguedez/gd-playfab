@@ -189,6 +189,7 @@ func _on_input_text_changed() -> void:
 	elif _extend_httprequest:
 		output.insert_text_at_caret("\t\n\tfunc _init() -> void:\n")
 		output.insert_text_at_caret("\t\treq_path = _SetMe\n")
+		output.insert_text_at_caret("\t\treq_authentication_type = _SetMe\n")
 		output.insert_text_at_caret("\t\treq_fields = [\n")
 		
 		for field in _fields:
