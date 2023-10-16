@@ -398,3 +398,14 @@ class GetItemResponse extends PlayFabEconomyModel:
 			return CatalogItem.new()
 		
 		return null
+
+class UpdateDraftItemResponse extends PlayFabEconomyModel:
+	## Updated metadata describing the catalog item just updated.
+	var item: CatalogItem
+	
+	func _property_get_revert(property: StringName) -> Variant:
+		if property == &"item":
+			return CatalogItem.new()
+		
+		return null
+

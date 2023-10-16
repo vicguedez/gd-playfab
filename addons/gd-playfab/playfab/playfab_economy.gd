@@ -267,3 +267,31 @@ class ExecuteInventoryOperations extends PlayFabEconomy:
 	func _new_result_model() -> PlayFabEconomyModel.OperationInventoryItemsResponse:
 		return PlayFabEconomyModel.OperationInventoryItemsResponse.new()
 
+## Update the metadata for an item in the working catalog.
+class UpdateDraftItem extends PlayFabEconomy:
+	## Whether the item should be published immediately. This value is optional, defaults to false.
+	var publish: bool
+	## The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+	var custom_tags: Dictionary = {}
+	## Updated metadata describing the catalog item to be updated.
+	var item: PlayFabEconomyModel.CatalogItem = PlayFabEconomyModel.CatalogItem.new()
+	
+	func _init() -> void:
+		req_path = "/Catalog/UpdateDraftItem"
+		req_authentication_type = AuthenticationType.ENTITY_TOKEN
+		req_fields = [
+			"publish",
+			"custom_tags",
+			"item",
+			]
+		req_required_fields = [
+			"publish",
+			]
+		
+		super()
+	
+	func get_response_data() -> PlayFabEconomyModel.UpdateDraftItemResponse:
+		return super()
+	
+	func _new_result_model() -> PlayFabEconomyModel.UpdateDraftItemResponse:
+		return PlayFabEconomyModel.UpdateDraftItemResponse.new()
