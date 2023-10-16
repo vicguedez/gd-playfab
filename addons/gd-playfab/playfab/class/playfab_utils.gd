@@ -1,11 +1,11 @@
 extends RefCounted
 class_name PlayFabUtils
 
-static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_case = false, model_only_dirty_props = false) -> Array:
-	var new_array = []
+static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_case := false, model_only_dirty_props := false) -> Array:
+	var new_array := []
 	
 	for value in array:
-		var value_type = typeof(value)
+		var value_type := typeof(value)
 		var new_value
 		
 		if value is PlayFabEconomyModel.InventoryItemsOperation:
@@ -24,12 +24,12 @@ static func array_convert_models_to_dictionary(array: Array, model_keys_pascal_c
 	
 	return new_array
 
-static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys_pascal_case = false, model_only_dirty_props = false) -> Dictionary:
-	var new_dict = {}
+static func dictionary_convert_models_to_dictionary(dict: Dictionary, model_keys_pascal_case := false, model_only_dirty_props := false) -> Dictionary:
+	var new_dict := {}
 	
 	for key in dict:
 		var value = dict[key]
-		var value_type = typeof(value)
+		var value_type := typeof(value)
 		var new_value
 		
 		if value is PlayFabModel:

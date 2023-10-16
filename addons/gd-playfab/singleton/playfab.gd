@@ -1,7 +1,7 @@
 extends Node
 
-var http_threads = true
-var http_compress = false
+var http_threads := true
+var http_compress := false
 
 var _http_pool: Array[HTTPRequest] = []
 

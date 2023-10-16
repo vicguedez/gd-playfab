@@ -1,15 +1,15 @@
 extends RefCounted
 class_name PlayFabModel
 
-var _defaults = {}
+var _defaults := {}
 
 func _init() -> void:
 	_store_defaults()
 
 ## Returns the whole model as a Dictionary, any model within it will be converted as well.
-func to_dictionary(keys_pascal_case = false, only_dirty_props = false) -> Dictionary:
-	var dict = {}
-	var prop_list = get_property_list()
+func to_dictionary(keys_pascal_case := false, only_dirty_props := false) -> Dictionary:
+	var dict := {}
+	var prop_list := get_property_list()
 	
 	for prop in prop_list:
 		if not _can_use_prop(prop):
@@ -46,7 +46,7 @@ func to_dictionary(keys_pascal_case = false, only_dirty_props = false) -> Dictio
 
 ## Parses a dictionary values into the Model.
 func parse_dictionary(dict: Dictionary, dict_is_body_response: bool) -> void:
-	var prop_list = get_property_list()
+	var prop_list := get_property_list()
 	
 	for prop in prop_list:
 		if not _can_use_prop(prop):
@@ -150,8 +150,8 @@ func _can_use_prop(prop: Dictionary) -> bool:
 # This only stores bool, int, float and String default values, later used to check
 # if a prop can be considered dirty.
 func _store_defaults() -> void:
-	var defaults = {}
-	var prop_list = get_property_list()
+	var defaults := {}
+	var prop_list := get_property_list()
 	
 	for prop in prop_list:
 		if not _can_use_prop(prop):

@@ -33,10 +33,16 @@ static func clear_authentication() -> void:
 	authentication_context.session_token = ""
 
 static func get_playfab_id() -> String:
-	return authentication_context.playfab_id
+	var id := authentication_context.playfab_id as String
+	
+	return id
 
 static func get_entity_token() -> String:
-	return authentication_context.entity_token
+	var token := authentication_context.entity_token as String
+	
+	return token
 
 static func get_session_token() -> String:
-	return authentication_context.session_token
+	var token := authentication_context.session_token as String
+	
+	return token

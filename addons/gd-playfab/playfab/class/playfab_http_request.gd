@@ -14,12 +14,12 @@ enum AuthenticationType {
 	DEVELOPER_SECRET_KEY,
 	}
 
-const SDK_VERSION = "1.0"
-const SUCCESS_CODES = [
+const SDK_VERSION := "1.0"
+const SUCCESS_CODES := [
 	HTTPClient.RESPONSE_OK,
 	HTTPClient.RESPONSE_NO_CONTENT,
 	]
-const ERROR_CODES = [
+const ERROR_CODES := [
 	HTTPClient.RESPONSE_BAD_REQUEST,
 	HTTPClient.RESPONSE_UNAUTHORIZED,
 	]
@@ -27,30 +27,30 @@ const ERROR_CODES = [
 ## Do not use unless you know what you are doing.
 var req_http: HTTPRequest
 ## API endpoint. Do not modify unless you know what you are doing.
-var req_api_url = "playfabapi.com"
+var req_api_url := "playfabapi.com"
 ## API version.
-var req_api_version = "230721"
+var req_api_version := "230721"
 ## Sets the authentication type to be used by this request. Default [enum AuthenticationType.NONE].
 var req_authentication_type: AuthenticationType = AuthenticationType.NONE
 ## Target path for this request. Default [code]"/"[/code].
-var req_path = "/"
+var req_path := "/"
 ## Http method for this request. Default [enum HTTPClient.METHOD_POST].
 var req_method: HTTPClient.Method = HTTPClient.METHOD_POST
 ## Data fields for this request. Default [code]{}[/code].
-var req_fields: Array = []
+var req_fields: Array[String] = []
 ## Required fields for this request. Default [code][][/code].
-var req_required_fields: Array = []
+var req_required_fields: Array[String] = []
 ## Extra headers for this request. Default [code][][/code].
-var req_extra_headers: Array = []
+var req_extra_headers: Array[String] = []
 ## Known success codes for this request. Default [constant SUCCESS_CODES].
 var req_success_codes: Array = SUCCESS_CODES.duplicate()
 ## Known error codes for this request. Default [constant ERROR_CODES].
 var req_error_codes: Array = ERROR_CODES.duplicate()
 
-var _requesting = false
-var _completed = {}
-var _defaults = {}
-var _crypto = Crypto.new()
+var _requesting := false
+var _completed := {}
+var _defaults := {}
+var _crypto := Crypto.new()
 
 func _init() -> void:
 	req_http = PlayFab.get_http()
@@ -67,23 +67,33 @@ func _notification(what: int) -> void:
 
 ## Returns request's result. Default [code]-1[/code].
 func get_request_result() -> HTTPRequest.Result:
-	return _completed.get("result", -1)
+	var result := _completed.get("result", -1) as HTTPRequest.Result
+	
+	return result
 
 ## Returns response's http code. Default [code]-1[/code].
 func get_response_code() -> int:
-	return _completed.get("code", -1)
+	var code := _completed.get("code", -1) as int
+	
+	return code
 
 ## Returns response's http headers. Default [code][][/code].
 func get_response_headers() -> PackedStringArray:
-	return _completed.get("headers", PackedStringArray([]))
+	var headers := _completed.get("headers", PackedStringArray([])) as PackedStringArray
+	
+	return headers
 
 ## Returns response's raw body. Default [code][][/code].
 func get_response_body() -> PackedByteArray:
-	return _completed.get("body", PackedByteArray([]))
+	var body := _completed.get("body", PackedByteArray([])) as PackedByteArray
+	
+	return body
 
 ## Returns response's error if any. Default [code]null[/code].
 func get_response_error() -> PlayFabModel.ApiErrorWrapper:
-	return _completed.get("error", null)
+	var error := _completed.get("error", null) as PlayFabModel.ApiErrorWrapper
+	
+	return error
 
 ## Returns response's data model if any. Default [code]null[/code].
 func get_response_data():
@@ -91,11 +101,15 @@ func get_response_data():
 
 ## Returns true if the response is expected. Default [code]false[/code].
 func is_response_expected() -> bool:
-	return _completed.get("expected", false)
+	var expected := _completed.get("expected", false) as bool
+	
+	return expected
 
 ## Returns true if the response was an error. Default [code]false[/code].
 func is_response_error() -> bool:
-	return _completed.has("error")
+	var error := _completed.has("error") as bool
+	
+	return error
 
 ## Utility method to check for errors after the request has finished. Checks that [method get_request_result] returns [enum HTTPRequest.RESULT_SUCCESS], [method is_response_error] returns [code]false[/code] and [method is_response_expected] returns [code]true[/code].
 func has_error() -> bool:
@@ -110,16 +124,16 @@ func send() -> Error:
 	if not _check_required_fields():
 		return FAILED
 	
-	var sdk_header = "GDPlayFab-%s.%s" % [SDK_VERSION, req_api_version]
-	var model_keys_pascal_case = true
-	var model_only_dirty_props = true
-	var data = ""
+	var sdk_header := "GDPlayFab-%s.%s" % [SDK_VERSION, req_api_version]
+	var model_keys_pascal_case := true
+	var model_only_dirty_props := true
+	var data := ""
 	
 	if req_method == HTTPClient.METHOD_POST:
 		data = JSON.stringify(_get_fields_as_dictionary(model_keys_pascal_case, model_only_dirty_props))
 	
-	var url = "https://%s.%s%s?sdk=%s" % [PlayFabSettings.title_id, req_api_url, req_path, sdk_header]
-	var headers = req_extra_headers.duplicate(true)
+	var url := "https://%s.%s%s?sdk=%s" % [PlayFabSettings.title_id, req_api_url, req_path, sdk_header]
+	var headers := req_extra_headers.duplicate(true)
 	
 	headers.append_array([
 		"Content-Type: application/json",
@@ -134,7 +148,7 @@ func send() -> Error:
 	elif req_authentication_type == AuthenticationType.DEVELOPER_SECRET_KEY:
 		headers.append("X-SecretKey: %s" % PlayFabSettings.developer_secret_key)
 	
-	var attempt = req_http.request(url, PackedStringArray(headers), req_method, data)
+	var attempt := req_http.request(url, PackedStringArray(headers), req_method, data)
 	
 	if not attempt == OK:
 		return attempt
@@ -148,7 +162,7 @@ func send() -> Error:
 
 # This only stores bool, int, float and String default values to prevent adding useless fields to the request.
 func _store_fields_defaults() -> void:
-	var defaults = {}
+	var defaults := {}
 	
 	for _field in req_fields:
 		var value = get(_field)
@@ -186,11 +200,11 @@ func _check_required_fields() -> bool:
 	return true
 
 func _get_fields_as_dictionary(model_keys_pascal_case = false, model_only_dirty_props = false) -> Dictionary:
-	var dict = {}
+	var dict := {}
 	
 	for _field in req_fields:
 		var value = get(_field)
-		var value_type = typeof(value)
+		var value_type := typeof(value)
 		var new_value
 		
 		if _field == "idempotency_id":
