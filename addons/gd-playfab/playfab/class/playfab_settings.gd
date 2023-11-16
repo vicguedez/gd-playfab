@@ -46,3 +46,13 @@ static func get_session_token() -> String:
 	var token := authentication_context.session_token as String
 	
 	return token
+
+static func get_entity_id() -> String:
+	var id := authentication_context.entity_id as String
+	
+	return id
+
+static func get_entity_type() -> String:
+	var type := authentication_context.entity_type as String
+	
+	return type
